@@ -1,0 +1,2 @@
+// This will update the likes count without reloading the page
+document.querySelector("#post-likes-<%= @post.id %>").innerText = "<%= @post.likes_count %>";
