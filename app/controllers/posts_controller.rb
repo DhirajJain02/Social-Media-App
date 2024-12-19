@@ -3,8 +3,12 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
     @posts = Post.includes(:comments).all
-    @post = Post.new  # Used for creating a new post directly on the index page
+    @post = Post.new # Used for creating a new post directly on the index page
     # @new_post = Post.new # For rendering the post creation form
+  end
+
+  def home
+
   end
 
   # Show a specific post
@@ -13,10 +17,10 @@ class PostsController < ApplicationController
     @comments = @post.comments.order(created_at: :desc) # Sort comments by newest first
   end
 
-    # Display the form to create a new post
-    def new
-      @post = Post.new
-    end
+  # Display the form to create a new post
+  def new
+    @post = Post.new
+  end
 
   # Create a new post
   def create
@@ -58,7 +62,6 @@ class PostsController < ApplicationController
     # Respond to the request to update the like count without reloading the page
     redirect_to posts_path
   end
-
 
   private
 

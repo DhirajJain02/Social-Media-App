@@ -1,137 +1,141 @@
-<div class="container">
-<div class="container mb-4 flex items-center justify-between p-2">
-  <!-- Left: Search Bar -->
-  <div class="flex items-center">
-    <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
+<div class="mt-2">
+  <div class="container mb-4 flex items-center justify-between">
+    <!-- Left: Search Bar -->
+    <div class="flex items-center">
+      <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
+    </div>
+
+    <!-- Right: Logo -->
+    <div class="flex items-center ">
+      <%#= image_tag("bi_search.png", alt: "Logo", class: "img ") %>
+      <input type="text" placeholder=" 🔍  Search for something here..." class="search-width p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bd"/>
+    </div>
   </div>
 
-  <!-- Right: Logo -->
-  <div class="flex items-center ">
-    <%#= image_tag("bi_search.png", alt: "Logo", class: "img ") %>
-    <input type="text" placeholder=" 🔍  Search for something here..." class="search-width p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mx-2 bd"/>
-  </div>
-</div>
+  <div class="container mx-auto bg-gray p-4">
+    <div class="container p-6 rounded-lg border border-gray-300 bg-white mb-4">
+      <div class="container">
 
-<div class="container mx-auto bg-gray p-6 rounded-lg">
-  <div class="container p-6 rounded-lg border border-gray-300 bg-white mb-4">
-  <div class="container">
-
-    <%= form_with model: @post, local: true do |f| %>
-      <div class="mb-4">
-        <%= f.label :title, class: "block" %>
-        <%= f.text_field :title, class: "w-full p-2 border border-gray-300 rounded-lg bg-gray" %>
-        <% @post.errors.full_messages_for(:title).each do |message| %>
-          <div class="text-red-500"><%= message %></div>
-        <% end %>
-      </div>
-
-      <div class="mb-4">
-        <%= f.label :description, class: "block" %>
-        <%= f.text_area :description, class: "w-full p-2 border border-gray-300 bg-gray rounded-lg" %>
-        <% @post.errors.full_messages_for(:description).each do |message| %>
-          <div class="text-red-500"><%= message %></div>
-        <% end %>
-      </div>
-
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center p-4 bt">
-          <!-- Live Video -->
-          <div class="flex items-center space-x-2">
-            <%= image_tag("bx_video.png", alt: "video", class: "img") %>
-            <%= button_tag "Live Video", type: "button", class: "text-indigo-600 hover1 mx-2 font-medium" %>
+        <%= form_with model: @post, local: true do |f| %>
+          <div class="mb-4">
+            <%= f.label :title, class: "block" %>
+            <%= f.text_field :title, class: "w-full p-2 border border-gray-300 rounded-lg bg-gray" %>
+            <% @post.errors.full_messages_for(:title).each do |message| %>
+              <div class="text-red-500"><%= message %></div>
+            <% end %>
           </div>
 
-          <!-- Photo/Video -->
-          <div class="flex items-center space-x-2">
-            <%= image_tag("ic_baseline-photo-camera-back.png", alt: "camera", class: "img") %>
-            <%= button_tag "Photo/Video", type: "button", class: "text-indigo-600 hover1 mx-2 font-medium" %>
+          <div class="mb-4">
+            <%= f.label :description, class: "block" %>
+            <%= f.text_area :description, class: "w-full p-2 border border-gray-300 bg-gray rounded-lg" %>
+            <% @post.errors.full_messages_for(:description).each do |message| %>
+              <div class="text-red-500"><%= message %></div>
+            <% end %>
           </div>
 
-          <!-- Feeling -->
-          <div class="flex items-center space-x-2">
-            <%= image_tag("fluent_emoji-24-regular.png", alt: "smile", class: "img") %>
-            <%= button_tag "Feeling", type: "button", class: "text-indigo-600 hover:text-indigo-800 mx-2 font-medium" %>
-          </div>
-        </div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center p-2 bt">
+              <!-- Live Video -->
+              <div class="flex items-center space-x-2">
+                <%= image_tag("bx_video.png", alt: "video", class: "img") %>
+                <%= button_tag "Live Video", type: "button", class: "text-indigo-600 hover1 ms-2 font-medium" %>
+              </div>
 
-        <%= f.submit "Post", class: "bg-blue-500 text-white px-4 hover1 rounded-lg " %>
+              <!-- Photo/Video -->
+              <div class="flex items-center space-x-2">
+                <%= image_tag("ic_baseline-photo-camera-back.png", alt: "camera", class: "img") %>
+                <%= button_tag "Photo/Video", type: "button", class: "text-indigo-600 hover1 mx-2 font-medium" %>
+              </div>
 
-      </div>
-    <% end %>
-
-  </div>
-  </div>
-
-  <div class="container mx-auto bg-gray-100 rounded-lg shadow-lg mb-4">
-    <% @posts.each do |post| %>
-      <div class="bg-white p-6 rounded-lg shadow-md mb-4">
-        <!-- Post Header Section: Title, Date, and More Options Button -->
-        <div class="flex justify-between items-center">
-          <div>
-            <h2 class="text-xl font-semibold text-gray-800"><%= post.title %></h2>
-            <p class="text-sm text-gray-500"><%= custom_time_ago_in_words(post.created_at) %>, Public</p>
-          </div>
-          <!-- More Options Button -->
-          <div class="text-gray-500 cursor-pointer">
-            <button class="text-sm">...</button>
-          </div>
-        </div>
-
-        <!-- Post Content (Description) -->
-        <p class="mt-4 text-gray-700"><%= post.description %></p>
-        <div class="mt-4 flex justify-between">
-          <%= link_to 'Show', post_path(post), class: "text-blue-500" %>
-          <%= link_to 'Edit', edit_post_path(post), class: "text-yellow-500" %>
-          <%= link_to 'Delete', post_path(post), data: {
-            turbo_method: :delete,
-            turbo_confirm: "Are you sure?"}, class: "text-red-500" %>
-        </div>
-        <!-- Post Likes and Comments Section -->
-        <div class="mt-4 flex like-gap items-center text-sm text-gray-500">
-          <span><%= post.likes_count %> Likes</span>
-          <span><%=post.comments.count %> Comments</span>
-        </div>
-        <hr class="mt-4"/>
-
-        <!-- Like and Comment Icons -->
-        <div class="mt-4 flex space-x-4 text-sm text-gray-600 icon-gap">
-        <!-- Like Icon-->
-          <!-- In your post display section (index.html.erb) -->
-          <%= button_to like_post_path(post), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
-            <%= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
-            <span id="like-count-<%= post.id %>" class="mx-2" style="cursor: pointer">Likes</span>
-          <% end %>
-
-          <!-- Comments Icon -->
-          <button class="flex items-center space-x-2 hover:text-blue-500">
-              <%= image_tag("fa6-regular_comment-dots.png", alt: "video", class: "img ") %>
-              <span class="mx-2">Comments</span>
-          </button>
-        </div>
-        <hr class="mt-4"/>
-
-        <!-- Comment Input Section -->
-        <div class="mt-4 flex items-center space-x-2">
-          <%= form_with model: [post, post.comments.build], remote: true, class: "flex w-full items-center" do |f| %>
-            <%= f.text_area :content, placeholder: "Write a comment...", class: "comment-width h-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500" %>
-            <div class="h-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray mx-2 focus:ring-blue-500 p-2">
-              <%= button_tag type: 'submit', class: 'py-2 px-4 rounded-lg flex items-center' do %>
-                <%= image_tag("fluent_send-16-filled.png", alt: "Send", class: "w-6 h-6 mr-2 cursor-pointer hover:opacity-80") %>
-              <% end %>
+              <!-- Feeling -->
+              <div class="flex items-center space-x-2">
+                <%= image_tag("fluent_emoji-24-regular.png", alt: "smile", class: "img") %>
+                <%= button_tag "Feeling", type: "button", class: "text-indigo-600 hover:text-indigo-800 mx-2 font-medium" %>
+              </div>
             </div>
-            <% if @comment&.errors&.any? %>
-              <ul class="text-red-500 text-sm mt-2">
-                <% @comment.errors.full_messages.for(:content).each do |message| %>
-                  <li><%= message %></li>
-                <% end %>
+
+            <%= f.submit "Post", class: "btn btn-primary" %>
+
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class=" mx-auto  mb-4">
+      <% @posts.each do |post| %>
+        <div class="bg-white p-6 rounded-lg shadow-md mb-4">
+          <!-- Post Header Section: Title, Date, and More Options Button -->
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-xl font-semibold text-gray-800"><%= post.title %></h2>
+              <p class="text-sm text-gray-500"><%= custom_time_ago_in_words(post.created_at) %>, Public</p>
+            </div>
+            <!-- More Options Button -->
+            <div class="text-gray-500 cursor-pointer dropdown">
+              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">...</button>
+              <ul class="dropdown-menu">
+                <li><%= link_to 'Show', post_path(post), class: "text-blue-500 dropdown-item" %></li>
+                <li><%= link_to 'Edit', edit_post_path(post), class: "text-yellow-500 dropdown-item" %></li>
+                <li><%= link_to 'Delete', post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-500 dropdown-item" %>
+                </li>
               </ul>
+            </div>
+          </div>
+
+          <!-- Post Content (Description) -->
+          <p class="mt-4 text-gray-700"><%= post.description %></p>
+          <!--        <div class="mt-4 flex justify-between">-->
+          <%#= link_to 'Show', post_path(post), class: "text-blue-500" %>
+          <%#= link_to 'Edit', edit_post_path(post), class: "text-yellow-500" %>
+          <%#= link_to 'Delete', post_path(post), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "text-red-500" %>
+          <!--        </div>-->
+          <!-- Post Likes and Comments Section -->
+          <div class="mt-4 flex like-gap items-center text-sm text-gray-500">
+            <span><%= post.likes_count %> Likes</span>
+            <span><%= post.comments.count %> Comments</span>
+          </div>
+          <hr class="mt-4"/>
+
+          <!-- Like and Comment Icons -->
+          <div class="mt-4 flex space-x-4 text-sm text-gray-600 icon-gap">
+            <!-- Like Icon-->
+            <!-- In your post display section (index.html.erb) -->
+            <%= button_to like_post_path(post), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+              <%= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+              <span id="like-count-<%= post.id %>" class="mx-2" style="cursor: pointer">Likes</span>
             <% end %>
 
-          <% end %>
-        </div>
+            <!-- Comments Icon -->
+            <button class="flex items-center space-x-2 hover:text-blue-500">
+              <%= image_tag("fa6-regular_comment-dots.png", alt: "video", class: "img ") %>
+              <span class="mx-2">Comments</span>
+            </button>
+          </div>
+          <hr class="mt-4"/>
 
-        <!-- Display Comments -->
-        <div class="mt-4 space-y-4">
+          <!-- Comment Input Section -->
+          <div class="mt-4 flex items-center space-x-2">
+            <%= form_with model: [post, post.comments.build], remote: true, class: "flex w-full items-center" do |f| %>
+              <%= f.text_area :content, placeholder: "Write a comment...", class: "comment-width border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500" %>
+              <div class=" border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray mx-2 focus:ring-blue-500 p-2">
+                <%= button_tag type: 'submit', class: 'mt-3 px-4 rounded-lg flex items-center' do %>
+                  <%= image_tag("fluent_send-16-filled.png", alt: "Send", class: "w-6 h-50 mr-2 cursor-pointer hover:opacity-80") %>
+                <% end %>
+              </div>
+              <% if @comment&.errors&.any? %>
+                <ul class="text-red-500 text-sm mt-2">
+                  <% @comment.errors.full_messages.for(:content).each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              <% end %>
+
+            <% end %>
+          </div>
+
+          <!-- Display Comments -->
+          <div class="mt-4 space-y-4">
             <div class="mt-4">
 
               <h2 class="text-xl font-semibold text-gray-800">Comments</h2>
@@ -139,34 +143,33 @@
 
             </div>
 
-          <% (post.comments || []).each_with_index do |comment, i| %>
-            <%# next if i == 0 %>
-            <% next if comment.nil? || comment.id.nil? %>
-            <div class="flex items-center justify-between space-x-2 mt-2">
-              <!-- Comment Text -->
-              <p class="text-sm text-gray-600 flex"><%= comment.content %></p>
+            <% (post.comments || []).each_with_index do |comment, i| %>
+              <%# next if i == 0 %>
+              <% next if comment.nil? || comment.id.nil? %>
+              <div class="flex items-center justify-between space-x-2 mt-2">
+                <!-- Comment Text -->
+                <p class="text-sm text-gray-600 flex"><%= comment.content %></p>
 
-              <!-- Icon -->
-              <div class="flex items-center space-x-2">
-                <%#= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
-                <%= button_to  like_post_comment_path(post, comment), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
-                <%= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
-                <span id="like-count-<%= comment.id %>" class="mx-2"><%= comment.like_count %></span>
-                <% end %>
+                <!-- Icon -->
+                <div class="flex items-center space-x-2">
+                  <%#= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                  <%= button_to like_post_comment_path(post, comment), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+                    <%= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                    <span id="like-count-<%= comment.id %>" class="mx-2"><%= comment.like_count %></span>
+                  <% end %>
+                </div>
+
+                <!--              <p class="text-sm text-gray-500"><%#= custom_time_ago_in_words(post.created_at) %>, Public</p>-->
+
               </div>
+              <hr class="mtop"/>
+            <% end %>
+          </div>
 
-<!--              <p class="text-sm text-gray-500"><%#= custom_time_ago_in_words(post.created_at) %>, Public</p>-->
 
-            </div>
-            <hr class="mtop"/>
-          <% end %>
         </div>
+      <% end %>
+    </div>
 
-
-
-      </div>
-    <% end %>
   </div>
-
-</div>
 </div>

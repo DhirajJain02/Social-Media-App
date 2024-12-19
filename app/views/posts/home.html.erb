@@ -1,0 +1,22 @@
+<div class="bg-img position-relative d-flex justify-content-center align-items-center">
+  <!-- Header -->
+  <header class="d-flex align-items-center p-3 position-absolute top-0 start-0 rounded shadow">
+    <%= image_tag("logo.png", alt: "Logo", class: "logo me-2 mx-3") %>
+    <%= image_tag("logo_name.png", alt: "Logo", class: "logo mx-3") %>
+  </header>
+
+  <!-- Content -->
+  <div class="content text-center text-white mx-auto">
+    <h1 class="text-center home-content p-6">
+
+      Social media shared today, tomorrow or by location
+    </h1>
+    <p class="mt-4" style="font-size: 20px; font-weight: 600">Discover with Maze</p>
+    <div class="mt-4 flex gap-3 px-5">
+      <%= link_to 'Create Account', "/", class: "btn btn-primary col-6 me-2 px-4 py-2 btn-width" %>
+      <!--      <button class="btn btn-primary col-6 me-2 px-4 py-2 btn-width">Create Account</button>-->
+      <%= link_to 'Login', "/", class: "btn btn-light col-6 me-2 px-4 py-2 btn-width" %>
+      <!--      <button class="btn btn-light col-6 text-info px-4 py-2 btn-width ">Login</button>-->
+    </div>
+  </div>
+</div>
