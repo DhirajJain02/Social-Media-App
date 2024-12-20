@@ -13,9 +13,11 @@
     </h1>
     <p class="mt-4" style="font-size: 20px; font-weight: 600">Discover with Maze</p>
     <div class="mt-4 flex gap-3 px-5">
-      <%= link_to 'Create Account', "/", class: "btn btn-primary col-6 me-2 px-4 py-2 btn-width" %>
+      <%= link_to 'Create Account', new_user_registration_path, class: "btn btn-primary col-6 me-2 px-4 py-2 btn-width" %>
       <!--      <button class="btn btn-primary col-6 me-2 px-4 py-2 btn-width">Create Account</button>-->
-      <%= link_to 'Login', "/", class: "btn btn-light col-6 me-2 px-4 py-2 btn-width" %>
+      <%= link_to 'Login', new_user_session_path, class: "btn btn-light col-6 me-2 px-4 py-2 btn-width" %>
+      <%#= link_to 'Delete', destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-500 dropdown-item" %>
+
       <!--      <button class="btn btn-light col-6 text-info px-4 py-2 btn-width ">Login</button>-->
     </div>
   </div>
