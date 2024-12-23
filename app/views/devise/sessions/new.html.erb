@@ -7,16 +7,21 @@
   <div class="form-container bg-dark bg-opacity-50 rounded text-light shadow-lg col-md-4" style="margin-top: 50px;width: 458px; height: 646px; padding: 50px">
 
     <h2 class="mb-4">Login</h2>
+    <% if flash[:alert] %>
+      <div class="bg-red-500 text-white p-4 rounded mb-4">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="mb-4">
         <%= f.label :email, class: "form-label" %><br/>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
       </div>
 
       <div class="mb-3">
         <%= f.label :password, class: "form-label" %><br/>
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control", required: true %>
       </div>
 
       <% if devise_mapping.rememberable? %>

@@ -1,10 +1,16 @@
 class PostsController < ApplicationController
-  # Show all posts on the homepage
+  # before_action :find_post, only: [:like]
+
   def index
-    @posts = Post.all
-    @posts = Post.includes(:comments).all
-    @post = Post.new # Used for creating a new post directly on the index page
-    # @new_post = Post.new # For rendering the post creation form
+    if user_signed_in?
+      @posts = Post.includes(:comments).where("visibility = ? OR user_id = ?", 'public', current_user.id).order(created_at: :desc)
+    else
+      # Show only public posts to users who are not signed in
+      @posts = Post.includes(:comments).where(visibility: 'public').order(created_at: :desc)
+    end
+
+    # Initialize a new post for the form
+    @post = Post.new
   end
 
   def home
@@ -24,7 +30,9 @@ class PostsController < ApplicationController
 
   # Create a new post
   def create
-    @post = Post.new(post_params)
+    # puts current_user
+    @post = current_user.posts.build(post_params)
+    Rails.logger.debug "Post attributes: #{@post.inspect}" # Debugging line
     if @post.save
       redirect_to posts_path, notice: "Post created successfully!"
     else
@@ -60,13 +68,17 @@ class PostsController < ApplicationController
     @post.increment!(:likes_count) # Increment the likes count
 
     # Respond to the request to update the like count without reloading the page
-    redirect_to posts_path
+    # redirect_to posts_path
+
+    #   new method
+
   end
 
   private
 
+
   # Strong parameters for post
   def post_params
-    params.require(:post).permit(:title, :description)
+    params.require(:post).permit(:title, :description, :visibility)
   end
 end

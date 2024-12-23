@@ -1,7 +1,130 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-2xl font-bold mb-4"><%= @post.title %></h1>
-  <p class="text-lg mb-4"><%= @post.description %></p>
 
-  <%= link_to 'Edit', edit_post_path(@post), class: "bg-yellow-500 text-white px-4 py-2 rounded-lg" %>
-  <%= link_to 'Back', posts_path, class: "bg-gray-500 text-white px-4 py-2 rounded-lg" %>
+<div class="container mb-4 flex items-center justify-between" style="margin-top: 20px;">
+  <div class="flex align-items-center">
+    <%= image_tag 'Frame 8.png' %>
+  </div>
+  <!-- Right: Logo -->
+  <div class="flex items-center ">
+    <input type="text" placeholder=" 🔍  Search for something here..." class="search-width p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bd"/>
+  </div>
+
+</div>
+
+
+<div class="container mx-auto bg-gray p-4" style="border-radius:10px;">
+
+  <div class="bg-white p-6 rounded-lg shadow-md mb-4 container mt-3">
+    <!-- Post Header Section: Title, Date, and More Options Button -->
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-800"><%= @post.title %></h2>
+        <p class="text-sm text-gray-500"><%= custom_time_ago_in_words(@post.created_at) %>
+          , <%= @post.visibility.capitalize %></p>
+      </div>
+      <!-- More Options Button -->
+      <div class="text-gray-500 cursor-pointer dropdown">
+        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">...</button>
+        <ul class="dropdown-menu">
+          <!--        <li><%#= link_to 'Show', post_path(post), class: "text-blue-500 dropdown-item" %></li>-->
+          <li><%= link_to 'Edit', edit_post_path(@post), class: "text-yellow-500 dropdown-item" %></li>
+          <li><%= link_to 'Delete', post_path(@post), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-500 dropdown-item" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Post Content (Description) -->
+    <p class="mt-4 text-gray-700"><%= @post.description %></p>
+    <!--        <div class="mt-4 flex justify-between">-->
+    <%#= link_to 'Show', post_path(post), class: "text-blue-500" %>
+    <%#= link_to 'Edit', edit_post_path(post), class: "text-yellow-500" %>
+    <%#= link_to 'Delete', post_path(post), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "text-red-500" %>
+    <!--        </div>-->
+    <!-- Post Likes and Comments Section -->
+    <div class="mt-4 flex like-gap items-center text-sm text-gray-500">
+      <span><%= @post.likes_count %> Likes</span>
+      <span><%= @post.comments.count %> Comments</span>
+    </div>
+    <hr class="mt-4"/>
+
+    <!-- Like and Comment Icons -->
+    <div class="mt-4 flex space-x-4 text-sm text-gray-600 icon-gap">
+      <!-- Like Icon-->
+      <!-- In your post display section (index.html.erb) -->
+      <%= button_to like_post_path(@post), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+        <%= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+        <span id="like-count-<%= @post.id %>" class="mx-2" style="cursor: pointer">Likes</span>
+      <% end %>
+
+      <!-- Comments Icon -->
+      <%= button_to post_path(@post), method: :get, remote: false, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+        <%= image_tag("fa6-regular_comment-dots.png", alt: "Comment", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+        <span class="mx-2" style="cursor: pointer">Comments</span>
+      <% end %>
+
+
+      <!--                <button class="flex items-center space-x-2 hover:text-blue-500">-->
+      <%#= image_tag("fa6-regular_comment-dots.png", alt: "video", class: "img ") %>
+      <!--                  <span class="mx-2">Comments</span>-->
+      <%#= link_to 'Comments', post_path(post), class: "text-decoration-none mx-2 " %>
+      <!--                </button>-->
+    </div>
+    <hr class="mt-4"/>
+
+    <!-- Comment Input Section -->
+    <div class="mt-4 flex items-center space-x-2">
+      <%= form_with model: [@post, @post.comments.build], remote: true, class: "flex w-full items-center" do |f| %>
+        <%= f.text_area :content, placeholder: "Write a comment...", class: "comment-width border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500" %>
+        <div class=" border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray mx-2 focus:ring-blue-500 p-2">
+          <%= button_tag type: 'submit', class: 'p-3 rounded-lg flex items-center' do %>
+            <%#= f.submit "Post", class: "btn" do%>
+
+            <%= image_tag("fluent_send-16-filled.png", alt: "Send", class: "w-6 h-50 mr-2 cursor-pointer hover:opacity-80") %>
+          <% end %>
+        </div>
+
+      <% end %>
+    </div>
+
+    <!-- Display Comments -->
+    <div class="mt-4 space-y-4">
+      <div class="mt-4">
+
+        <h2 class="text-xl font-semibold text-gray-800">Comments</h2>
+        <hr class="mt-4"/>
+
+      </div>
+
+      <% (@post.comments || []).each_with_index do |comment, i| %>
+        <%# next if i == 0 %>
+        <% next if comment.nil? || comment.id.nil? %>
+        <div class="flex items-center justify-between space-x-2 mt-2">
+
+          <!-- Comment Text -->
+          <div class="flex">
+            <%= image_tag("logo_without.png", alt: "Logo", class: "img me-1") %>
+            <strong><%= comment.user.first_name %> <%= comment.user.last_name %></strong>
+          </div>
+
+          <!-- Icon -->
+          <div class="flex items-center space-x-2">
+            <%#= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+            <%= button_to like_post_comment_path(@post, comment), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+              <%= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+              <span id="like-count-<%= comment.id %>" class="mx-2"><%= comment.like_count %></span>
+            <% end %>
+          </div>
+          <!--              <p class="text-sm text-gray-500"><%#= custom_time_ago_in_words(post.created_at) %>, Public</p>-->
+        </div>
+        <div class="flex justify-between">
+          <p class="text-sm text-gray-600 mx-4"><%= comment.content %></p>
+          <p class="text-sm text-gray-600 mx-4">
+            <%= custom_time_ago_in_words(comment.created_at) %>
+
+          </p>
+        </div>
+        <hr class="mtop"/>
+      <% end %>
+    </div>
+  </div>
 </div>

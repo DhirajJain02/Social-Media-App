@@ -3,6 +3,7 @@ class CommentsController < ApplicationController
   before_action :find_comment, only: [:like]
   def create
     @comment = @post.comments.build(comment_params)
+    @comment.user = current_user  # Associate the comment with the current user
 
     if @comment.save
       # Respond with JS for inline update of comments

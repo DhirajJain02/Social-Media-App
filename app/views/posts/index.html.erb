@@ -1,13 +1,13 @@
 <div class="flex">
   <!-- Sidebar (Vertical Navbar) -->
-  <div class=" bg-gray-800 text-white h-screen p-4 d-flex flex-column align-items-center ">
+  <div class=" text-white h-screen p-4 d-flex flex-column align-items-center ">
     <div class="d-flex flex-column gap-4 text-center">
       <!-- Left: Search Bar -->
       <div class="flex mt-2" style="height: 40px">
         <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
       </div>
       <!-- Feed Section -->
-      <div class="bg-primary py-2 rounded d-flex align-items-center justify-content-center" style="margin-top : 40px;" >
+      <div class="bg-primary py-2 rounded d-flex align-items-center justify-content-center" style="margin-top : 40px;">
         <%= image_tag("Feed.png", alt: "Logo", class: "img me-3") %>
         <%= link_to 'Feed', posts_path, class: "text-white text-decoration-none fw-bold" %>
       </div>
@@ -26,13 +26,9 @@
     </div>
   </div>
 
-  <div class="flex-1 p-6">
+  <div class="flex p-6">
     <div class="mt-2">
       <div class="container mb-4 flex items-center justify-between">
-
-
-        <!--    <header class="d-flex align-items-center p-3 position-absolute top-0 start-0 rounded shadow">-->
-        <!--    </header>-->
 
         <!-- Right: Logo -->
         <div class="flex items-center ">
@@ -65,6 +61,9 @@
           <div class="container">
 
             <%= form_with model: @post, local: true do |f| %>
+              <% @post.errors.full_messages.each do |message| %>
+                <div class="text-red-500"><%= message %></div>
+              <% end %>
               <div class="mb-4">
                 <%= f.label :title, class: "block" %>
                 <%= f.text_field :title, class: "w-full p-2 border border-gray-300 rounded-lg bg-gray" %>
@@ -82,7 +81,7 @@
               </div>
 
               <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center p-2 bt">
+                <div class="flex align-items-center p-2 bt">
                   <!-- Live Video -->
                   <div class="flex items-center space-x-2">
                     <%= image_tag("bx_video.png", alt: "video", class: "img") %>
@@ -100,6 +99,11 @@
                     <%= image_tag("fluent_emoji-24-regular.png", alt: "smile", class: "img") %>
                     <%= button_tag "Feeling", type: "button", class: "text-indigo-600 hover:text-indigo-800 mx-2 font-medium" %>
                   </div>
+
+                  <div class="flex align-items-center space-x-2">
+                    <%= f.label :visibility, "Visibility" %>
+                    <%= f.select :visibility, Post::VISIBILITY_OPTIONS, {}, class: "form-control mx-2", style: "width : 100px;" %>
+                  </div>
                 </div>
 
                 <%= f.submit "Post", class: "btn btn-primary" %>
@@ -112,12 +116,14 @@
 
         <div class=" mx-auto  mb-4">
           <% @posts.each do |post| %>
+
             <div class="bg-white p-6 rounded-lg shadow-md mb-4">
               <!-- Post Header Section: Title, Date, and More Options Button -->
               <div class="flex justify-between items-center">
                 <div>
                   <h2 class="text-xl font-semibold text-gray-800"><%= post.title %></h2>
-                  <p class="text-sm text-gray-500"><%= custom_time_ago_in_words(post.created_at) %>, Public</p>
+                  <p class="text-sm text-gray-500"><%= custom_time_ago_in_words(post.created_at) %>
+                    , <%= post.visibility.capitalize %></p>
                 </div>
                 <!-- More Options Button -->
                 <div class="text-gray-500 cursor-pointer dropdown">
@@ -150,15 +156,16 @@
                 <!-- Like Icon-->
                 <!-- In your post display section (index.html.erb) -->
                 <%= button_to like_post_path(post), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
-                  <%= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                  <%= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                  <%#= image_tag(post.liked_by?(current_user) ? 'like_filled.png' : 'like_empty.png', alt: "Like", class: "like-icon") %>
                   <span id="like-count-<%= post.id %>" class="mx-2" style="cursor: pointer">Likes</span>
                 <% end %>
 
                 <!-- Comments Icon -->
-                <button class="flex items-center space-x-2 hover:text-blue-500">
-                  <%= image_tag("fa6-regular_comment-dots.png", alt: "video", class: "img ") %>
-                  <span class="mx-2">Comments</span>
-                </button>
+                <%= button_to post_path(post), method: :get, remote: false, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+                  <%= image_tag("fa6-regular_comment-dots.png", alt: "Comment", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                  <span class="mx-2" style="cursor: pointer">Comments</span>
+                <% end %>
               </div>
               <hr class="mt-4"/>
 
@@ -167,53 +174,83 @@
                 <%= form_with model: [post, post.comments.build], remote: true, class: "flex w-full items-center" do |f| %>
                   <%= f.text_area :content, placeholder: "Write a comment...", class: "comment-width border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500" %>
                   <div class=" border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray mx-2 focus:ring-blue-500 p-2">
-                    <%= button_tag type: 'submit', class: 'mt-3 px-4 rounded-lg flex items-center' do %>
+                    <%= button_tag type: 'submit', class: 'p-3 rounded-lg flex items-center' do %>
+                      <%#= f.submit "Post", class: "btn" do%>
+
                       <%= image_tag("fluent_send-16-filled.png", alt: "Send", class: "w-6 h-50 mr-2 cursor-pointer hover:opacity-80") %>
                     <% end %>
                   </div>
-                  <% if @comment&.errors&.any? %>
-                    <ul class="text-red-500 text-sm mt-2">
-                      <% @comment.errors.full_messages.for(:content).each do |message| %>
-                        <li><%= message %></li>
-                      <% end %>
-                    </ul>
-                  <% end %>
 
                 <% end %>
               </div>
 
               <!-- Display Comments -->
+<!--              <div class="mt-4 space-y-4">-->
+<!--                <div class="mt-4">-->
+<!--                  <h2 class="text-xl font-semibold text-gray-800">Comments</h2>-->
+<!--                  <hr class="mt-4"/>-->
+<!--                </div>-->
+
+                <%# (post.comments || []).each_with_index do |comment| %>
+                  <%# next if i == 0 %>
+                  <%# next if comment.nil? || comment.id.nil? %>
+<!--                  <div class="flex items-center justify-between space-x-2 mt-2">-->
+
+                    <!-- Comment Text -->
+<!--                    <div class="flex">-->
+                      <%#= image_tag("logo_without.png", alt: "Logo", class: "img me-1") %>
+<!--                      <strong><%#= comment.user.first_name %> <%#= comment.user.last_name %></strong>-->
+<!--                    </div>-->
+
+                    <!-- Icon -->
+<!--                    <div class="flex items-center space-x-2">-->
+                      <%#= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                      <%#= button_to like_post_comment_path(post, comment), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+                        <%#= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+<!--                        <span id="like-count-<%#= comment.id %>" class="mx-2"><%#= comment.like_count %></span>-->
+                      <%# end %>
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="flex justify-between">-->
+<!--                    <p class="text-sm text-gray-600 mx-4"><%#= comment.content %></p>-->
+<!--                    <p class="text-sm text-gray-600 mx-4"><%#= custom_time_ago_in_words(comment.created_at) %></p>-->
+<!--                  </div>-->
+<!--                  <hr class="mtop"/>-->
+                <%# end %>
+<!--              </div>-->
               <div class="mt-4 space-y-4">
                 <div class="mt-4">
-
                   <h2 class="text-xl font-semibold text-gray-800">Comments</h2>
                   <hr class="mt-4"/>
-
                 </div>
 
-                <% (post.comments || []).each_with_index do |comment, i| %>
-                  <%# next if i == 0 %>
-                  <% next if comment.nil? || comment.id.nil? %>
+                <% latest_comment = post.comments.order(created_at: :desc).first %>
+                <% if latest_comment %>
                   <div class="flex items-center justify-between space-x-2 mt-2">
+
                     <!-- Comment Text -->
-                    <p class="text-sm text-gray-600 flex"><%= comment.content %></p>
+                    <div class="flex">
+                      <%= image_tag("logo_without.png", alt: "Logo", class: "img me-1") %>
+                      <strong><%= latest_comment.user.first_name %> <%= latest_comment.user.last_name %></strong>
+                    </div>
 
                     <!-- Icon -->
                     <div class="flex items-center space-x-2">
-                      <%#= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
-                      <%= button_to like_post_comment_path(post, comment), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
-                        <%= image_tag("ant-design_heart-twotone.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
-                        <span id="like-count-<%= comment.id %>" class="mx-2"><%= comment.like_count %></span>
+                      <%= button_to like_post_comment_path(post, latest_comment), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
+                        <%= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                        <span id="like-count-<%= latest_comment.id %>" class="mx-2"><%= latest_comment.like_count %></span>
                       <% end %>
                     </div>
-
-                    <!--              <p class="text-sm text-gray-500"><%#= custom_time_ago_in_words(post.created_at) %>, Public</p>-->
-
+                  </div>
+                  <div class="flex justify-between">
+                    <p class="text-sm text-gray-600 mx-4"><%= latest_comment.content %></p>
+                    <p class="text-sm text-gray-600 mx-4"><%= custom_time_ago_in_words(latest_comment.created_at) %></p>
                   </div>
                   <hr class="mtop"/>
+                <% else %>
+                  <p class="text-gray-500">No comments yet. Be the first to comment!</p>
                 <% end %>
               </div>
-
 
             </div>
           <% end %>

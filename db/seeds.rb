@@ -7,3 +7,9 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+user = User.find_or_create_by(email: 'dhiraj@gmail.com') do |user|
+  user.password = 'password'
+  user.password_confirmation = 'password'
+  user.add_role(:user)
+end
+puts "User created: #{user.email}"
