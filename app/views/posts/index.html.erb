@@ -146,7 +146,7 @@
               <!--        </div>-->
               <!-- Post Likes and Comments Section -->
               <div class="mt-4 flex like-gap items-center text-sm text-gray-500">
-                <span><%= post.likes_count %> Likes</span>
+                <span><%= post.likes.count %> Likes</span>
                 <span><%= post.comments.count %> Comments</span>
               </div>
               <hr class="mt-4"/>
@@ -156,8 +156,8 @@
                 <!-- Like Icon-->
                 <!-- In your post display section (index.html.erb) -->
                 <%= button_to like_post_path(post), method: :post, remote: true, class: "flex items-center space-x-2 hover:text-blue-500" do %>
-                  <%= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
-                  <%#= image_tag(post.liked_by?(current_user) ? 'like_filled.png' : 'like_empty.png', alt: "Like", class: "like-icon") %>
+                  <%#= image_tag("like_empty.png", alt: "Like", class: "w-5 h-5 cursor-pointer hover:opacity-80") %>
+                  <%= image_tag(post.likes.where(user_id: current_user.id).present? ? 'like_filled.png' : 'like_empty.png', alt: "Like", class: "like-icon") %>
                   <span id="like-count-<%= post.id %>" class="mx-2" style="cursor: pointer">Likes</span>
                 <% end %>
 

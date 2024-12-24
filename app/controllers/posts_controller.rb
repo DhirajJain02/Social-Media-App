@@ -65,13 +65,11 @@ class PostsController < ApplicationController
 
   def like
     @post = Post.find(params[:id])
-    @post.increment!(:likes_count) # Increment the likes count
-
-    # Respond to the request to update the like count without reloading the page
-    # redirect_to posts_path
-
-    #   new method
-
+    if @post.likes.where(user_id: current_user.id).present?
+      @post.likes.where(user_id: current_user.id).destroy_all
+    else
+      @post.likes.create!(user_id: current_user.id)
+    end
   end
 
   private

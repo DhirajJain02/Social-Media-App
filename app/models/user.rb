@@ -7,6 +7,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  has_many :likes, dependent: :destroy
 
   validates :first_name, :last_name, presence: true
   validates :phone_number, presence: true, format: { with: /\A\d{10,15}\z/, message: "must be a valid phone number" }
