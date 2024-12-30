@@ -5,12 +5,17 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
-  # def devise_controller?
-  #   self.class < Devise::SessionsController || self.class < Devise::RegistrationsController || self.class < Devise::PasswordsController
-  # end
+
   def after_sign_in_path_for(resource)
-    posts_path # after log in navigate to the index page
-  end 
+    if resource.has_role?(:admin)
+      flash[:notice] = "Signed in successfully!"
+
+      admin_dashboard_path # Redirect admin users to the admin dashboard
+    else
+      flash[:notice] = "Signed in successfully!"
+      posts_path # Redirect regular users to the posts page
+    end
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name, :phone_number])

@@ -1,0 +1,117 @@
+<div class="flex">
+  <!-- Sidebar Section -->
+  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 300px">
+    <div class="d-flex flex-column gap-4 text-center">
+      <!--  Logo -->
+      <div class="flex mt-2" style="height: 40px">
+        <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
+      </div>
+      <!-- Feed Section -->
+      <div class=" d-flex" style="margin-top : 40px;">
+        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3 ms-1") %>
+        <%= link_to 'Feed', admin_dashboard_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="d-flex">
+        <%= image_tag("Profile.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Profile', admin_profile_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Managed User Section -->
+      <div class="bg-primary py-2 rounded d-flex px-3">
+        <%= image_tag("managed_filled.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-white fw-bold text-decoration-none" %>
+      </div>
+
+      <!-- Logout Section -->
+      <div class="d-flex">
+        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Main Content Section -->
+  <div class="container mb-4 d-flex flex-column justify-between p-0">
+    <div class="container mb-4 d-flex justify-between ms-2">
+
+      <div class="flex mt-4" style="font-size: 28px; font-weight: 700; color: grey">
+        User Management
+      </div>
+      <div class="dropdown mt-3 flex rounded-lg me-3">
+        <!-- Use data-bs-toggle="dropdown" for Bootstrap 5 drop down toggle -->
+        <%= button_tag(type: 'button', class: 'btn ', data: { bs_toggle: 'dropdown' }, aria: { expanded: 'false' }) do %>
+          <%= image_tag("profile_pic.png", alt: "Logo", class: "rounded-full", style: "width:45px; height:45px; border-radius:20px;") %>
+        <% end %>
+
+        <div class="ml-3">
+          <p class="m-0"><%= current_user.first_name %> <%= current_user.last_name %></p>
+          <p style="font-size: 13px;">Admin</p>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <ul class="dropdown-menu">
+          <li>
+            <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-red-500 dropdown-item" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="p-3 mt-4 rounded-lg mx-4 bg-gray">
+      <div class="flex justify-between me-2">
+
+        <div class="d-flex mb-6 mt-2 mx-4 ">
+          <h2 class="" style="font-size: 28px; font-weight: 500; ">List of Users</h2>
+        </div>
+        <div class="bg-primary d-flex px-4 align-items-center rounded-4">
+          <%= image_tag("managed_filled.png", alt: "Logo", class: "img me-3") %>
+          <%= link_to 'Create User', admin_new_dashboard_path, class: "text-white text-decoration-none " %>
+        </div>
+      </div>
+      <!-- User Table -->
+      <div class="p-4">
+        <table class="table-auto table-hover w-full">
+
+          <tbody>
+          <% @users.each do |user| %>
+            <tr class="d-flex align-items-center mb-3 bg-white shadow p-2" style="border-radius:10px ">
+              <td class="d-flex col-1"><%= image_tag("logo.png", alt: "Logo", style: "width:32px; height:32px;") %></td>
+              <td class="col-3 flex text-start align-items-center">
+                <div class="<%= user.active? ? 'bg-success' : 'bg-danger' %> me-2 rounded-circle" style="width: 12px; height: 12px;"></div>
+                <%= user.first_name %> <%= user.last_name %></td>
+              <td class="px-4 col-2 text-start"><%= user.phone_number %></td>
+              <td class="px-4  col-3 text-start"><%= user.email %></td>
+              <td class="px-4 col-2 text-start">
+                <% if user.active? %>
+                  <%= link_to 'Deactivate', "/admin/users/#{user.id}/deactivate", method: :get, class: "bg-danger bg-opacity-25 text-decoration-none text-danger px-4 py-1 rounded-lg hover:bg-red-200" %>
+                <% else %>
+                  <%= link_to 'Activate', "/admin/users/#{user.id}/activate", method: :get, class: "bg-success bg-opacity-25 text-decoration-none text-success px-4 py-1 rounded-lg hover:bg-green-200" %>
+                <% end %>
+              </td>
+              <td class="px-4 text-center col-1 text-start">
+                <button class="text-gray-500 hover:text-gray-700">
+                  <i class="fas fa-ellipsis-h">...</i>
+                </button>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+          <% if flash[:notice] || flash[:alert] %>
+            <div class="fixed-bottom mb-4 d-flex justify-content-end me-5">
+              <div class="alert d-flex justify-between align-items-center alert-secondary text-white bg-dark bg-opacity alert-dismissible shadow-lg" style="width: 80%" role="alert">
+                <%= flash[:notice] || flash[:alert] %>
+                <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
+                <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            </div>
+          <% end %>
+        </table>
+
+      </div>
+    </div>
+  </div>
+
+</div>

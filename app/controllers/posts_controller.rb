@@ -1,5 +1,4 @@
 class PostsController < ApplicationController
-  # before_action :find_post, only: [:like]
 
   def index
     if user_signed_in?
@@ -32,13 +31,16 @@ class PostsController < ApplicationController
   def create
     # puts current_user
     @post = current_user.posts.build(post_params)
-    Rails.logger.debug "Post attributes: #{@post.inspect}" # Debugging line
     if @post.save
       redirect_to posts_path, notice: "Post created successfully!"
     else
       @posts = Post.all
       render :index, status: :unprocessable_entity
     end
+  end
+
+  def profile
+    @user = current_user # Fetch the currently logged-in user's details
   end
 
   # Display the form to edit an existing post
@@ -73,8 +75,6 @@ class PostsController < ApplicationController
   end
 
   private
-
-
   # Strong parameters for post
   def post_params
     params.require(:post).permit(:title, :description, :visibility)

@@ -1,0 +1,85 @@
+<div class="flex">
+  <div class="bg-white h-screen p-4 d-flex flex-column align-items-center ">
+    <div class="d-flex flex-column gap-4 text-center">
+      <!-- Left: Search Bar -->
+      <div class="flex mt-2" style="height: 40px">
+        <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
+      </div>
+
+      <!-- Feed Section -->
+      <div class="d-flex align-items-center justify-content-center" style="margin-top : 40px;">
+        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Feed', admin_dashboard_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="bg-primary py-2 rounded d-flex align-items-center justify-content-center" >
+        <%= image_tag("profile-filled.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Profile', admin_profile_path, class: "text-white text-decoration-none fw-bold" %>
+      </div>
+
+      <!-- Managed User Section -->
+      <div class="d-flex">
+        <%= image_tag("manage_user.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Logout Section -->
+      <div class="d-flex align-items-center justify-content-center">
+        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mx-auto p-6">
+    <div class="container mb-4 flex items-center justify-between">
+
+      <!-- Right: Logo -->
+      <div class="flex items-center ">
+        <input type="text" placeholder=" 🔍  Search for something here..." class="search-width p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bd"/>
+      </div>
+      <div class="flex align-items-center  ">
+        <div class="mx-2">
+          <%= current_user.first_name %> <%= current_user.last_name %>
+        </div>
+
+        <!-- Profile Image with Dropdown Trigger -->
+        <div class="dropdown">
+          <!-- Use data-bs-toggle="dropdown" for Bootstrap 5 dropdown toggle -->
+          <%= button_tag(type: 'button', class: 'btn ', data: { bs_toggle: 'dropdown' }, aria: { expanded: 'false' }) do %>
+            <%= image_tag("profile_pic.png", alt: "Logo", style: "width:45px; height:45px") %>
+          <% end %>
+
+          <!-- Dropdown Menu -->
+          <ul class="dropdown-menu">
+            <li>
+              <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-red-500 dropdown-item" %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-body-secondary rounded-lg p-4">
+
+      <div class="max-w-lg mx-auto bg-white rounded-lg align-items-center justify-content-center text-center">
+        <div class="text-center p-4">
+          <h1 class="font-bold" style="font-size: 34px;">Profile Details</h1>
+        </div>
+        <div class="p-6">
+          <p class="flex justify-content-center">
+            <%= image_tag("profile_pic.png", alt: "Logo", style: "border-radius: 50px; width: 100px; height: 100px ") %>
+          </p>
+
+          <p class="mt-4"><strong>Name:</strong> <%= @user.first_name %> <%= @user.last_name %></p>
+          <p class="mt-2"><strong>Email:</strong> <%= @user.email %></p>
+          <p class="mt-2"><strong>Phone Number:</strong> <%= @user.phone_number %></p>
+          <p class="mt-2"><strong>Roles:</strong> <%= @user.roles.map(&:name).join(", ") %></p>
+          <p class="mt-2"><strong>Joined On:</strong> <%= @user.created_at.strftime("%d %B %Y") %></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

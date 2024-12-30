@@ -1,0 +1,164 @@
+<div class="flex">
+  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 300px">
+    <div class="d-flex flex-column gap-4 text-center">
+      <!--  Logo -->
+      <div class="flex mt-2" style="height: 40px">
+        <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
+      </div>
+      <!-- Feed Section -->
+      <div class=" d-flex" style="margin-top : 40px;">
+        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3 ms-1") %>
+        <%= link_to 'Feed', admin_dashboard_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="d-flex">
+        <%= image_tag("Profile.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Profile', admin_profile_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Managed User Section -->
+      <div class="bg-primary py-2 rounded d-flex px-3">
+        <%= image_tag("managed_filled.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-white fw-bold text-decoration-none" %>
+      </div>
+
+      <!-- Logout Section -->
+      <div class="d-flex">
+        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-4 d-flex flex-column justify-between p-0">
+    <div class="container mb-4 d-flex justify-between ms-2">
+
+      <div class="flex mt-4" style="font-size: 28px; font-weight: 700; color: grey">
+        User Management
+      </div>
+      <div class="dropdown mt-3 flex rounded-lg me-3">
+        <!-- Use data-bs-toggle="dropdown" for Bootstrap 5 drop down toggle -->
+        <%= button_tag(type: 'button', class: 'btn ', data: { bs_toggle: 'dropdown' }, aria: { expanded: 'false' }) do %>
+          <%= image_tag("profile_pic.png", alt: "Logo", class: "rounded-full", style: "width:45px; height:45px; border-radius:20px;") %>
+        <% end %>
+
+        <div class="ml-3">
+          <p class="m-0"><%= current_user.first_name %> <%= current_user.last_name %></p>
+          <p style="font-size: 13px;">Admin</p>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <ul class="dropdown-menu">
+          <li>
+            <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-red-500 dropdown-item" %>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="p-3 mt-4 rounded-lg mx-4 bg-gray min-vh-100">
+      <div class="container">
+        <h2 class="text-secondary">Add User</h2>
+        <div class="mt-4">
+          <%= form_with model: @user, url: admin_create_dashboard_path, local: true, html: { class: 'w-100' } do |f| %>
+            <div class="row">
+              <div class="form-group col-6 mb-5">
+                <% @user.errors.full_messages_for(:first_name).each do |msg| %>
+                  <div class="text-danger"><%= msg %></div>
+                <% end %>
+                <%= f.text_field :first_name, class: 'form-control', placeholder: 'First Name', disabled: @user.errors.any? %>
+              </div>
+
+              <div class="form-group col-6 mb-5">
+                <% @user.errors.full_messages_for(:last_name).each do |msg| %>
+                  <div class="text-danger"><%= msg %></div>
+                <% end %>
+                <%= f.text_field :last_name, class: 'form-control', placeholder: 'Last Name', disabled: @user.errors.any? %>
+              </div>
+
+              <div class="form-group col-6 mb-5">
+                <% @user.errors.full_messages_for(:email).each do |msg| %>
+                  <div class="text-danger"><%= msg %></div>
+                <% end %>
+                <%= f.email_field :email, class: 'form-control', placeholder: 'Email', disabled: @user.errors.any? %>
+              </div>
+
+              <div class="form-group col-6 mb-5">
+                <% @user.errors.full_messages_for(:phone_number).each do |msg| %>
+                  <div class="text-danger"><%= msg %></div>
+                <% end %>
+                <%= f.telephone_field :phone_number, class: 'form-control', placeholder: 'Phone Number', disabled: @user.errors.any? %>
+              </div>
+
+              <div class="form-group col-6 mb-5">
+                <% @user.errors.full_messages_for(:role_ids).each do |msg| %>
+                  <div class="text-danger"><%= msg %></div>
+                <% end %>
+                <%= f.label "Assign Roles", class: 'form-label' %><br>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                  <%= f.collection_check_boxes :role_ids, @roles, :id, :name do |b| %>
+                    <label class="btn border rounded-lg role-btn m-2" style="border-radius: 10px;">
+                      <%= b.check_box class: 'd-none' %>
+                      <%= b.object.name %>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="form-group text-end">
+                <%= f.submit "Create User", class: 'btn btn-primary mx-5 px-4', disabled: @user.errors.any? %>
+              </div>
+            </div>
+            <%= hidden_field_tag :close_error_box, 'true' if params[:close_error_box].present? %>
+
+            <% if @user.errors.any? %>
+              <div class="fixed-bottom mb-4 d-flex justify-content-end me-5">
+                <div class="alert d-flex justify-between align-items-center alert-secondary text-white bg-dark bg-opacity alert-dismissible shadow-lg" style="width: 80%" role="alert">
+                  Note :- <%= @user.errors.full_messages.first %>
+                  <button type="submit" name="close_error_box" onclick="window.location.reload();" class="btn-close bg-danger align-items-center" value="true" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+            <% end %>
+            <% if flash[:notice] || flash[:alert] %>
+              <div class="fixed-bottom mb-4 d-flex justify-content-end me-5">
+                <div class="alert d-flex justify-between align-items-center alert-secondary text-white bg-dark bg-opacity alert-dismissible shadow-lg" style="width: 80%" role="alert">
+                  <%= flash[:notice] || flash[:alert] %>
+                  <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
+                  <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const roleButtons = document.querySelectorAll('.role-btn');
+
+        roleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Find the checkbox inside the label
+                const checkbox = this.querySelector('input[type="checkbox"]');
+
+                // Toggle the 'checked' state of the hidden checkbox
+                checkbox.checked = !checkbox.checked;
+
+                // Toggle the background color of the button
+                if (checkbox.checked) {
+                    this.classList.remove('btn-outline-primary');
+                    this.classList.add('btn-primary');  // Change background color when selected
+                } else {
+                    this.classList.remove('btn-primary');
+                    // this.classList.add('btn-outline-primary');  // Keep the border style when unselected
+                }
+            });
+        });
+    });
+
+</script>

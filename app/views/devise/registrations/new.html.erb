@@ -1,10 +1,12 @@
+
+
 <div class="bg-img position-relative d-flex justify-content-center align-items-center">
   <!-- Header -->
   <header class="d-flex align-items-center p-3 position-absolute top-0 start-0 rounded shadow">
     <%= image_tag("logo.png", alt: "Logo", class: "logo me-2 mx-3") %>
     <%= image_tag("logo_name.png", alt: "Logo", class: "logo mx-3") %>
   </header>
-  <div class="form-container bg-dark bg-opacity-50 rounded text-light shadow-lg col-md-4 d-flex justify-content-end" style="margin-top: 50px;width: 1137px; height: 646px; padding-top: 50px; padding-right: 70px">
+  <div class="form-container bg-dark bg-opacity-75 rounded text-light shadow-lg col-md-4 d-flex justify-content-end" style="margin-top: 50px;width: 1137px; height: 646px; padding-top: 50px; padding-right: 70px">
     <div class="form-content">
       <h2>Create account</h2>
       <% if resource.errors.any? %>
@@ -16,9 +18,8 @@
           </ul>
         </div>
       <% end %>
-      <p>For buttons, band or celebrity</p>
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-        <%= render "devise/shared/error_messages", resource: resource %>
+        <%#= render "devise/shared/error_messages", resource: resource %>
 
         <!-- Row 1: First Name and Last Name -->
         <div class="row mb-3">

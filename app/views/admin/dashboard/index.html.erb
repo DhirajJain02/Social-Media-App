@@ -1,85 +1,66 @@
+<!-- Sidebar (Vertical Navbar) -->
 <div class="flex">
-  <!-- Sidebar (Vertical Navbar) -->
-  <div class=" text-white h-screen p-4 d-flex flex-column align-items-center ">
+  <% if flash[:notice] || flash[:alert] %>
+    <div class="fixed-top mb-4 d-flex justify-content-center me-5 mt-2">
+      <div class="alert d-flex justify-between align-items-center alert-success alert-dismissible shadow-lg" style="width: 50%" role="alert">
+        <%= flash[:notice] || flash[:alert] %>
+        <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
+        <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  <% end %>
+  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 300px">
     <div class="d-flex flex-column gap-4 text-center">
-      <!-- Left: Search Bar -->
+      <!--  Logo -->
       <div class="flex mt-2" style="height: 40px">
         <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
       </div>
       <!-- Feed Section -->
-      <div class="bg-primary py-2 rounded d-flex align-items-center justify-content-center" style="margin-top : 40px;">
-        <%= image_tag("Feed.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Feed', posts_path, class: "text-white text-decoration-none fw-bold" %>
+      <div class="bg-primary py-2 rounded d-flex" style="margin-top : 40px;">
+        <%= image_tag("Feed.png", alt: "Logo", class: "img me-3 ms-1") %>
+        <%= link_to 'Feed', admin_dashboard_path, class: "text-white text-decoration-none fw-bold" %>
       </div>
 
       <!-- Profile Section -->
-      <div class="d-flex align-items-center justify-content-center">
+      <div class="d-flex">
         <%= image_tag("Profile.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Profile', 'profile', class: "text-black text-decoration-none" %>
+        <%= link_to 'Profile', admin_profile_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Managed User Section -->
+      <div class="d-flex">
+        <%= image_tag("manage_user.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-black text-decoration-none" %>
       </div>
 
       <!-- Logout Section -->
-      <div class="d-flex align-items-center justify-content-center">
+      <div class="d-flex">
         <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
         <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
       </div>
     </div>
   </div>
 
-  <div class="flex p-6">
-    <div class="mt-2">
-      <% if flash[:notice] || flash[:alert] %>
-        <div class="fixed-top mb-4 d-flex justify-content-center me-5 mt-2">
-          <div class="alert d-flex justify-between align-items-center alert-success alert-dismissible shadow-lg" style="width: 50%" role="alert">
-            <%= flash[:notice] || flash[:alert] %>
-            <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
-            <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        </div>
-      <% end %>
-
-      <div class="container mb-4 flex items-center justify-between">
-
-        <!-- Right: Logo -->
-        <div class="flex items-center ">
-          <input type="text" placeholder=" 🔍  Search for something here..." class="search-width p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bd"/>
-        </div>
-        <div class="flex align-items-center  ">
-          <div class="mx-2">
-            <%= current_user.first_name %> <%= current_user.last_name %>
-          </div>
-
-          <!-- Profile Image with Dropdown Trigger -->
-          <div class="dropdown">
-            <!-- Use data-bs-toggle="dropdown" for Bootstrap 5 dropdown toggle -->
-            <%= button_tag(type: 'button', class: 'btn ', data: { bs_toggle: 'dropdown' }, aria: { expanded: 'false' }) do %>
-              <%= image_tag("profile_pic.png", alt: "Logo", style: "width:45px; height:45px") %>
-            <% end %>
-
-            <!-- Dropdown Menu -->
-            <ul class="dropdown-menu">
-              <li>
-                <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-red-500 dropdown-item" %>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="container mx-auto bg-gray p-4">
+  <div class="container mb-4 d-flex flex-column justify-content-center align-items-center">
+    <!-- Right: Logo -->
+    <div class="flex justify-content-center mt-4 " style="width: 92%">
+      <input type="text" placeholder=" 🔍  Search for something here..." class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bd" style="width: 100%"/>
+    </div>
+    <div class="flex justify-content-center mt-5" style="width: 92%">
+      <div class="container mx-auto bg-gray rounded-lg p-4">
         <div class="container p-6 rounded-lg border border-gray-300 bg-white mb-4">
           <div class="container">
 
             <%= form_with model: @post, local: true do |f| %>
-              <% @post.errors.full_messages.each do |message| %>
-                <div class="text-red-500"><%= message %></div>
-              <% end %>
+              <%# @post.errors.full_messages.each do |message| %>
+<!--                <div class="text-red-500"><%#= message %></div>-->
+              <%# end %>
               <div class="mb-4">
                 <%= f.label :title, class: "block" %>
                 <%= f.text_field :title, class: "w-full p-2 border border-gray-300 rounded-lg bg-gray" %>
                 <% @post.errors.full_messages_for(:title).each do |message| %>
                   <div class="text-red-500"><%= message %></div>
-              <% end %>
+                <% end %>
               </div>
 
               <div class="mb-4">
@@ -178,7 +159,7 @@
               <!-- Comment Input Section -->
               <div class="mt-4 flex items-center space-x-2">
                 <%= form_with model: [post, post.comments.build], remote: true, class: "flex w-full items-center" do |f| %>
-                  <%= f.text_area :content, placeholder: "Write a comment...", class: "comment-width border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500" %>
+                  <%= f.text_area :content, placeholder: "Write a comment...", class: "comment-width border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500", required: true %>
                   <div class=" border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray mx-2 focus:ring-blue-500 p-2">
                     <%= button_tag type: 'submit', class: 'p-3 rounded-lg flex items-center' do %>
                       <%= image_tag("fluent_send-16-filled.png", alt: "Send", class: "w-6 h-50 mr-2 cursor-pointer hover:opacity-80") %>
@@ -227,6 +208,46 @@
         </div>
 
       </div>
+
     </div>
+  </div>
+
+  <div class="container mb-4 align-items-center " style="width: 20%">
+    <!-- Sidebar -->
+    <!-- Profile Image with Dropdown Trigger -->
+    <div class="dropdown mt-3 flex items-center rounded-lg" style="width: max-content;">
+      <!-- Use data-bs-toggle="dropdown" for Bootstrap 5 dropdown toggle -->
+      <%= button_tag(type: 'button', class: 'btn ', data: { bs_toggle: 'dropdown' }, aria: { expanded: 'false' }) do %>
+        <%= image_tag("profile_pic.png", alt: "Logo", class:"rounded-full" ,style: "width:45px; height:45px; border-radius:20px;") %>
+      <% end %>
+
+      <div class="ml-3">
+        <p class="m-0"><%= current_user.first_name %> <%= current_user.last_name %></p>
+        <p style="font-size: 13px;">Admin</p>
+      </div>
+
+      <!-- Dropdown Menu -->
+      <ul class="dropdown-menu">
+        <li>
+          <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-red-500 dropdown-item" %>
+        </li>
+      </ul>
+    </div>
+    <div class="bg-gray-100 mt-4">
+      <h2 class="text-lg mb-4 mx-2">Users List</h2>
+      <ul class="px-2">
+        <% @users.each do |user| %>
+          <% if user.posts.any? %>
+            <li class="mb-3 flex">
+              <%= image_tag "logo.png", class: "img d-flex me-2"%>
+              <p class="d-flex">
+                <%= user.first_name %> <%= user.last_name %>
+              </p>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+
   </div>
 </div>
