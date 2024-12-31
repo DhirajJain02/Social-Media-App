@@ -1,21 +1,20 @@
 <div class="flex">
-  <div class="bg-white h-screen p-4 d-flex flex-column align-items-center ">
+  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 250px">
     <div class="d-flex flex-column gap-4 text-center">
-      <!-- Left: Search Bar -->
+      <!--  Logo -->
       <div class="flex mt-2" style="height: 40px">
         <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
       </div>
-
       <!-- Feed Section -->
-      <div class="d-flex align-items-center justify-content-center" style="margin-top : 40px;">
-        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3") %>
+      <div class=" d-flex" style="margin-top : 40px;">
+        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3 ms-1") %>
         <%= link_to 'Feed', admin_dashboard_path, class: "text-black text-decoration-none" %>
       </div>
 
       <!-- Profile Section -->
-      <div class="bg-primary py-2 rounded d-flex align-items-center justify-content-center" >
+      <div class="bg-primary py-2 rounded d-flex px-1">
         <%= image_tag("profile-filled.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Profile', admin_profile_path, class: "text-white text-decoration-none fw-bold" %>
+        <%= link_to 'Profile', admin_profile_path, class: "text-white fw-bold text-decoration-none" %>
       </div>
 
       <!-- Managed User Section -->
@@ -24,8 +23,15 @@
         <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-black text-decoration-none" %>
       </div>
 
+      <!--Reports Section -->
+      <div class="d-flex">
+        <%= image_tag("report-filled.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Reports', admin_dashboard_reports_path, class: "text-black text-decoration-none" %>
+      </div>
+
+
       <!-- Logout Section -->
-      <div class="d-flex align-items-center justify-content-center">
+      <div class="d-flex">
         <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
         <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
       </div>

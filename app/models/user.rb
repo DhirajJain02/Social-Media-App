@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   rolify
   has_many :posts, dependent: :destroy
+  has_many :comments, through: :posts
   after_create :assign_default_role
 
   # Include default devise modules. Others available are:

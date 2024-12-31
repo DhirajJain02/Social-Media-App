@@ -18,10 +18,17 @@
       </div>
 
       <!-- Managed User Section -->
-      <div class="bg-primary py-2 rounded d-flex px-3">
+      <div class="bg-primary py-2 rounded d-flex px-2">
         <%= image_tag("managed_filled.png", alt: "Logo", class: "img me-3") %>
         <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-white fw-bold text-decoration-none" %>
       </div>
+
+      <!--Reports Section -->
+      <div class="d-flex">
+        <%= image_tag("report-filled.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Reports', admin_dashboard_reports_path, class: "text-black text-decoration-none" %>
+      </div>
+
 
       <!-- Logout Section -->
       <div class="d-flex">

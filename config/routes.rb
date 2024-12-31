@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get "users/:id/deactivate", to: "dashboard#deactivate_user", as: "deactivate_user_dashboard"
     get "/dashboard/new", to: "dashboard#new", as: "new_dashboard"
     post "/dashboard/new", to: "dashboard#create", as: "create_dashboard"
+    get "/dashboard/reports", to: "dashboard#reports"
   end
 
   resources :posts do

@@ -9,12 +9,13 @@
       </div>
     </div>
   <% end %>
-  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 300px">
+  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width:300px">
     <div class="d-flex flex-column gap-4 text-center">
       <!--  Logo -->
       <div class="flex mt-2" style="height: 40px">
         <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
       </div>
+
       <!-- Feed Section -->
       <div class="bg-primary py-2 rounded d-flex" style="margin-top : 40px;">
         <%= image_tag("Feed.png", alt: "Logo", class: "img me-3 ms-1") %>
@@ -31,6 +32,12 @@
       <div class="d-flex">
         <%= image_tag("manage_user.png", alt: "Logo", class: "img me-3") %>
         <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-black text-decoration-none" %>
+      </div>
+
+      <!-- Report Section -->
+      <div class="d-flex">
+        <%= image_tag("report-filled.png", alt: "Logo", class: "img me-3") %>
+        <%= link_to 'Reports', admin_dashboard_reports_path, class: "text-black text-decoration-none" %>
       </div>
 
       <!-- Logout Section -->

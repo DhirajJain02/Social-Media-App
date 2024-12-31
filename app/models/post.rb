@@ -16,4 +16,7 @@ class Post < ApplicationRecord
   # def liked_by?(user)
   #   likes.exists?(user_id: user.id)
   # end
+  def comment_contents
+    comments.pluck(:content)
+  end
 end
