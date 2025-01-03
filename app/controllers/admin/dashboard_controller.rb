@@ -1,3 +1,5 @@
+require "csv"
+
 class Admin::DashboardController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_admin
@@ -37,6 +39,33 @@ class Admin::DashboardController < ApplicationController
 
   def profile
     @user = current_user # Fetch the currently logged-in user's details
+  end
+
+  def upload_file
+
+  end
+
+  def upload_csv
+    if params[:file].present?
+      @file_upload = params[:file]
+      file = params[:file]
+
+      if file.content_type == "text/csv" # Handle CSV files
+        process_csv(file)
+      elsif file.content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" # Handle Excel files
+        process_excel(file)
+      else
+        flash[:error] = "Please upload a CSV or Excel file."
+        redirect_to admin_upload_files_path, status: :unprocessable_entity
+        return
+      end
+
+      flash[:success] = "File uploaded successfully!"
+    else
+      flash[:error] = "Please select a file to upload."
+    end
+
+    redirect_to admin_managed_users_dashboard_path
   end
 
   def managed_users
@@ -122,90 +151,19 @@ class Admin::DashboardController < ApplicationController
     end
   end
 
-  # def generate_csv(users)
-  #   CSV.generate(headers: true) do |csv|
-  #     csv << ["Name", "Posts", "Comments", "Likes"]
-  #     users.each do |user|
-  #       csv << [user.first_name, user.posts_count, user.comments_count, user.likes_count]
-  #     end
-  #   end
-  # end
-
-  def generate_csv(records)
-    CSV.generate(headers: true) do |csv|
-      if records.first.is_a?(User)
-        # User-based reports
-        csv << ["First Name", "Post Title", "Post Description", "Comments Content", "Likes Count"]
-        records.each do |user|
-          user.posts.each do |post|
-            # Loop through posts of a user and generate a row for each post
-            post.comment_contents.each do |comment_content|
-              csv << [
-                user.first_name,
-                post.title,
-                post.description,
-                comment_content,
-                post.likes_count
-              ]
-            end
-          end
-        end
-      elsif records.first.is_a?(Post)
-        # Post-based reports
-        csv << ["Post Title", "Post Description", "Comments Content", "Likes Count" ]
-        records.each do |post|
-          post.comment_contents.each do |comment_content|
-            csv << [
-              post.title,
-              post.description,
-              comment_content,
-              post.likes_count
-
-            ]
-          end
-        end
-      end
+  def process_csv(file)
+    # Parse CSV and create users from the CSV
+    CSV.foreach(file.path, headers: true) do |row|
+      User.create!(row.to_h) # Adjust according to your CSV format
     end
   end
 
-
-  def generate_xlsx(records)
-    # Initialize the workbook
-    package = Axlsx::Package.new
-    workbook = package.workbook
-
-    workbook.add_worksheet(name: 'Report') do |sheet|
-      if records.first.is_a?(User)
-        # User-based reports
-        sheet.add_row ["First Name", "Post Title", "Post Description", "Comments Content", "Likes Count"]
-        records.each do |user|
-          user.posts.each do |post|
-            sheet.add_row [
-                            user.first_name,
-                            post.title,
-                            post.description,
-                            post.comment_contents,
-                            post.likes_count
-                          ]
-          end
-        end
-      elsif records.first.is_a?(Post)
-        # Post-based reports
-        sheet.add_row ["Post Title", "Description", "Comments Content", "Likes Count"]
-        records.each do |post|
-          sheet.add_row [
-                          post.title,
-                          post.description,
-                          post.comment_contents,
-                          post.likes_count
-
-                        ]
-        end
-      end
+  def process_excel(file)
+    # Parse Excel and create users from the Excel file
+    spreadsheet = Roo::Spreadsheet.open(file.path)
+    spreadsheet.each_with_index do |row, index|
+      next if index == 0 # Skip header row
+      User.create!(first_name: row[0], last_name: row[1], email: row[2], phone_number: row[3], password: row[4])
     end
-
-    # Send the Excel file to the browser
-    package.to_stream.read
   end
-
 end

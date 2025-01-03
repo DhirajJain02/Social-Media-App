@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+  get "emails/test_email"
   # get "home/index"
   devise_for :users
+  # devise_for :users, controllers: { sessions: "users/registrations" }
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -18,7 +21,11 @@ Rails.application.routes.draw do
     get "/dashboard/new", to: "dashboard#new", as: "new_dashboard"
     post "/dashboard/new", to: "dashboard#create", as: "create_dashboard"
     get "/dashboard/reports", to: "dashboard#reports"
+    get "/dashboard/uploads", to: "dashboard#upload_file", as: "upload_files"
+    post "/dashboard/uploads", to: "dashboard#upload_csv", as: "upload_csv"
   end
+  get "test_email", to: "emails#test_email"
+  post "test_email", to: "emails#test_email"
 
   resources :posts do
     resources :comments do
@@ -30,6 +37,7 @@ Rails.application.routes.draw do
       post :like
     end
   end
+
   get "profile", to: "posts#profile", as: "profile"
   get "admin/profile", to: "admin/dashboard#profile", as: "admin_profile"
 

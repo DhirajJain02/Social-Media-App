@@ -73,10 +73,17 @@
         <div class="d-flex mb-6 mt-2 mx-4 ">
           <h2 class="" style="font-size: 28px; font-weight: 500; ">List of Users</h2>
         </div>
+        <div class="flex">
+          <div class="bg-white d-flex px-4 align-items-center rounded-4 mx-2">
+            <%= image_tag("upload.png", alt: "Logo", class: "img me-3") %>
+            <%= link_to 'Upload User', admin_upload_files_path, class: "text-decoration-none " %>
+          </div>
         <div class="bg-primary d-flex px-4 align-items-center rounded-4">
           <%= image_tag("managed_filled.png", alt: "Logo", class: "img me-3") %>
           <%= link_to 'Create User', admin_new_dashboard_path, class: "text-white text-decoration-none " %>
         </div>
+        </div>
+
       </div>
       <!-- User Table -->
       <div class="p-4">

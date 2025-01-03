@@ -43,6 +43,9 @@ gem "rolify"
 
 gem "csv"
 gem "caxlsx"
+gem "roo"
+gem "sendgrid-ruby"
+
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -68,3 +71,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "dotenv-rails", "~> 3.1"

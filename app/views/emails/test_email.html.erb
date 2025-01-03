@@ -1,0 +1,15 @@
+<div class="container mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-4">Send Test Email</h1>
+  <%= form_with url: test_email_path, method: :post, local: true do %>
+    <div class="mb-4">
+      <%= label_tag :email, "Enter Email Address", class: "block mb-2" %>
+      <%= text_field_tag :email, nil, placeholder: "example@example.com", class: "w-full p-2 border border-gray-300 rounded-lg" %>
+    </div>
+    <%= submit_tag "Send Email", class: "bg-blue-500 text-white px-4 py-2 rounded-lg" %>
+  <% end %>
+  <% if flash[:notice] %>
+    <p class="text-green-500 mt-4"><%= flash[:notice] %></p>
+  <% elsif flash[:alert] %>
+    <p class="text-red-500 mt-4"><%= flash[:alert] %></p>
+  <% end %>
+</div>
