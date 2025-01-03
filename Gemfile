@@ -45,6 +45,8 @@ gem "csv"
 gem "caxlsx"
 gem "roo"
 gem "sendgrid-ruby"
+gem "sidekiq"
+
 
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]

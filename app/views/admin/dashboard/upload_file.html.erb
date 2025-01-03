@@ -77,7 +77,15 @@
             </ul>
           </div>
         <% end %>
-
+        <% if flash[:notice] || flash[:alert] %>
+          <div class="fixed-bottom mb-4 d-flex justify-content-end me-5">
+            <div class="alert d-flex justify-between align-items-center alert-secondary text-white bg-dark bg-opacity alert-dismissible shadow-lg" style="width: 80%" role="alert">
+              <%= flash[:notice] || flash[:alert] %>
+              <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
+              <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        <% end %>
         <div class="flex justify-content-center align-items-center mt-5">
           <%= form_with url: admin_upload_files_path, local: true, multipart: true, id: "upload-form", class: "flex flex-col items-center" do |form| %>
             <label for="file-input" class="bg-primary text-white d-flex align-items-center justify-center cursor-pointer"
