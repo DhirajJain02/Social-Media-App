@@ -1,42 +1,20 @@
 <div class="flex">
   <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 300px">
     <div class="d-flex flex-column gap-4 text-center">
-      <!--  Logo -->
-      <div class="flex mt-2" style="height: 40px">
+      <!-- Logo -->
+      <div class="flex mt-2" style="height: 40px; margin-bottom: 40px;">
         <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
       </div>
-      <!-- Feed Section -->
-      <div class=" d-flex" style="margin-top : 40px;">
-        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3 ms-1") %>
-        <%= link_to 'Feed', admin_dashboard_path, class: "text-black text-decoration-none" %>
-      </div>
 
-      <!-- Profile Section -->
-      <div class="d-flex">
-        <%= image_tag("Profile.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Profile', admin_profile_path, class: "text-black text-decoration-none" %>
-      </div>
-
-      <!-- Managed User Section -->
-      <div class="bg-primary py-2 rounded d-flex px-2">
-        <%= image_tag("managed_filled.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-white fw-bold text-decoration-none" %>
-      </div>
-
-      <!--Reports Section -->
-      <div class="d-flex">
-        <%= image_tag("report-filled.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Reports', admin_dashboard_reports_path, class: "text-black text-decoration-none" %>
-      </div>
-
-
-      <!-- Logout Section -->
-      <div class="d-flex">
-        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
-      </div>
+      <!-- Navigation Links -->
+      <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_path, icon: "Feed-filled.png", text: "Feed", active_class: "text-black" } %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_profile_path, icon: "Profile.png", text: "Profile", active_class: "text-black" } %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_managed_users_dashboard_path, icon: "managed_filled.png", text: "Manage Users", custom_classes: "bg-primary py-2 rounded px-2", active_class: "text-white fw-bold" } %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_reports_path, icon: "report-filled.png", text: "Reports", active_class: "text-black" } %>
+      <%= render partial: "shared/logout_link" %>
     </div>
   </div>
+
 
   <div class="container mb-4 d-flex flex-column justify-between p-0">
     <div class="container mb-4 d-flex justify-between ms-2">
@@ -88,7 +66,7 @@
         <% end %>
         <div class="flex justify-content-center align-items-center mt-5">
           <%= form_with url: admin_upload_files_path, local: true, multipart: true, id: "upload-form", class: "flex flex-col items-center" do |form| %>
-            <label for="file-input" class="bg-primary text-white d-flex align-items-center justify-center cursor-pointer"
+            <label for="file-input" class="bg-primary text-white d-flex align-items-center cursor-pointer"
                    style="width: 420px; height: 90px; border-radius: 15px; border: 7px solid #e2e2e2;">
               <%= image_tag "upload-big.png", class: "mb-2" %>
               <span style="margin-left: 40px;">Select file to upload</span>

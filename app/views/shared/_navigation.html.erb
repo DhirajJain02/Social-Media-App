@@ -1,0 +1,15 @@
+<!--<div class="text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 300px">-->
+  <div class="d-flex flex-column gap-4 text-center">
+    <!-- Logo -->
+    <div class="flex mt-2" style="height: 40px">
+      <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
+    </div>
+
+    <!-- Navigation Links -->
+    <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_path, icon: "Feed-filled.png", text: "Feed", active_class: "text-black" } %>
+    <%= render partial: "shared/navigation_link", locals: { path: admin_profile_path, icon: "Profile.png", text: "Profile", active_class: "text-black" } %>
+    <%= render partial: "shared/navigation_link", locals: { path: admin_managed_users_dashboard_path, icon: "managed_filled.png", text: "Manage Users", custom_classes: "bg-primary py-2 rounded px-2", active_class: "text-white fw-bold" } %>
+    <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_reports_path, icon: "report-filled.png", text: "Reports", active_class: "text-black" } %>
+    <%= render partial: "shared/logout_link" %>
+  </div>
+<!--</div>-->

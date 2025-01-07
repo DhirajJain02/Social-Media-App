@@ -1,40 +1,26 @@
 <div class="flex">
-  <div class="bg-white h-screen p-3 d-flex flex-column align-items-center" style="width: 250px">
+  <% if flash[:notice] || flash[:alert] %>
+    <div class="fixed-top mb-4 d-flex justify-content-center me-5 mt-2">
+      <div class="alert d-flex justify-between align-items-center alert-success alert-dismissible shadow-lg" style="width: 50%" role="alert">
+        <%= flash[:notice] || flash[:alert] %>
+        <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
+        <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  <% end %>
+  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 250px">
     <div class="d-flex flex-column gap-4 text-center">
-      <!--  Logo -->
-      <div class="flex mt-2" style="height: 40px">
+      <!-- Logo -->
+      <div class="flex mt-2" style="height: 40px; margin-bottom: 40px;">
         <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
       </div>
 
-      <!-- Feed Section -->
-      <div class="d-flex" style="margin-top : 40px;">
-        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3 ms-1") %>
-        <%= link_to 'Feed', admin_dashboard_path, class: "text-black text-decoration-none" %>
-      </div>
-
-      <!-- Profile Section -->
-      <div class="d-flex">
-        <%= image_tag("Profile.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Profile', admin_profile_path, class: "text-black text-decoration-none" %>
-      </div>
-
-      <!-- Managed User Section -->
-      <div class="d-flex">
-        <%= image_tag("manage_user.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-black text-decoration-none" %>
-      </div>
-
-      <!-- Report Section -->
-      <div class="bg-primary py-2 rounded d-flex px-1">
-        <%= image_tag("report.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Reports', admin_dashboard_reports_path, class: "text-white text-decoration-none fw-bold" %>
-      </div>
-
-      <!-- Logout Section -->
-      <div class="d-flex">
-        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
-      </div>
+      <!-- Navigation Links -->
+      <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_path, icon: "Feed-filled.png", text: "Feed", active_class: "text-black"} %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_profile_path, icon: "Profile.png", text: "Profile", active_class: "text-black" } %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_managed_users_dashboard_path, icon: "manage_user.png", text: "Manage Users"} %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_reports_path, icon: "report.png", text: "Reports", custom_classes: "bg-primary py-2 rounded px-2", active_class: "text-white fw-bold"  } %>
+      <%= render partial: "shared/logout_link" %>
     </div>
   </div>
 
@@ -87,7 +73,7 @@
               </p>
               <div class="mb-5"></div>
               <%= form_with url: admin_dashboard_reports_path, method: :get, id: "reportForm1", local: true do %>
-                <input type="hidden" id="filter_field" name="filter" value=""/>
+                <input type="hidden" id="filter_field_1" name="filter" value=""/>
                 <div class="mb-3 justify-between flex px-5">
                   <div class="d-flex">
                     <%= radio_button_tag :format, 'xlsx', false, id: 'report1_excel', class: 'form-check-input' %>
@@ -98,7 +84,7 @@
                     <%= label_tag 'report1_csv', 'CSV', class: 'form-check-label ms-1' %>
                   </div>
                 </div>
-                <%= button_tag 'Download', type: 'submit', class: 'btn btn-primary w-full mt-4', id: "downloadButton1" %>
+                <%= button_tag 'Download', type: 'button', class: 'btn btn-primary w-full mt-4', id: "downloadButton1" %>
               <% end %>
             </div>
           </div>
@@ -116,12 +102,12 @@
               </div>
               <h5 class="card-title">All Users</h5>
               <p class="card-text text-muted">
-                Having more than 10 posts.
+                Having more than 5 posts.
               </p>
               <div class="mb-5"></div>
 
               <%= form_with url: admin_dashboard_reports_path, method: :get, id: "reportForm2", local: true do %>
-                <input type="hidden" id="filter_field" name="filter" value=""/>
+                <input type="hidden" id="filter_field_2" name="filter" value=""/>
                 <div class="mb-3 justify-between flex px-5">
                   <div class="d-flex">
                     <%= radio_button_tag :format, 'xlsx', false, id: 'report2_excel', class: 'form-check-input' %>
@@ -133,7 +119,7 @@
                   </div>
                 </div>
                 <%#= link_to 'Download', admin_dashboard_reports_path, class: 'btn btn-primary w-full mt-4', id: 'downloadButton2' %>
-                <%= button_tag 'Download', type: 'submit', class: 'btn btn-primary w-full mt-4', id: "downloadButton2" %>
+                <%= button_tag 'Download', type: 'button', class: 'btn btn-primary w-full mt-4', id: "downloadButton2" %>
               <% end %>
             </div>
           </div>
@@ -157,7 +143,7 @@
 
               <%= form_with url: admin_dashboard_reports_path, method: :get, id: "reportForm3", local: true do %>
                 <%#= hidden_field_tag :filter, 'all_posts_report', id: 'filter_field' %>
-                <input type="hidden" id="filter_field" name="filter" value=""/>
+                <input type="hidden" id="filter_field_3" name="filter" value=""/>
 
                 <div class="mb-3 justify-between flex px-5">
                   <div class="d-flex">
@@ -170,7 +156,7 @@
                     <%= label_tag 'report3_csv', 'CSV', class: 'form-check-label ms-1' %>
                   </div>
                 </div>
-                <%= button_tag 'Download', type: 'submit', class: 'btn btn-primary w-full mt-4', id: 'downloadButton3' %>
+                <%= button_tag 'Download', type: 'button', class: 'btn btn-primary w-full mt-4', id: 'downloadButton3' %>
               <% end %>
             </div>
           </div>
@@ -185,19 +171,25 @@
     document.addEventListener('DOMContentLoaded', function () {
         const downloadButton1 = document.getElementById('downloadButton1');
         const downloadButton2 = document.getElementById('downloadButton2');
-        const downloadButton3 = document.getElementById('downloadButton3'); // New button for posts report
+        const downloadButton3 = document.getElementById('downloadButton3');
 
         // Event listeners for each button
         downloadButton1.addEventListener('click', function (event) {
-            handleDownloadButtonClick(event, 'all_users_report', 'reportForm1');
+            let reportType = document.getElementById('filter_field_1')
+            reportType.value = 'all_users_report';
+            handleDownloadButtonClick(event, reportType, 'reportForm1');
         });
 
         downloadButton2.addEventListener('click', function (event) {
-            handleDownloadButtonClick(event, 'users_more_than_10_posts_report', 'reportForm2');
+            let reportType = document.getElementById('filter_field_2')
+            reportType.value = 'users_more_than_10_posts_report';
+            handleDownloadButtonClick(event, reportType, 'reportForm2');
         });
 
         downloadButton3.addEventListener('click', function (event) {
-            handleDownloadButtonClick(event, 'all_posts_report', 'reportForm3'); // For all posts report
+            let reportType = document.getElementById('filter_field_3')
+            reportType.value = 'all_posts_report';
+            handleDownloadButtonClick(event, reportType, 'reportForm3'); // For all posts report
         });
 
         // Function to handle the click of each download button
@@ -208,11 +200,9 @@
             const selectedFormat = document.querySelector('input[name="format"]:checked') ?
                 document.querySelector('input[name="format"]:checked').value : 'csv'; // Default to CSV if nothing selected
 
+
             // Get the specific form using the passed `formId`
             const form = document.getElementById(formId);
-
-            // Update the hidden filter field with the selected report type
-            document.getElementById('filter_field').value = reportType;
 
             // Update form action dynamically based on report type and format
             const actionUrl = new URL(form.action);

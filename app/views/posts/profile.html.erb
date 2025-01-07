@@ -10,20 +10,26 @@
 
       <!-- Feed Section -->
       <div class="d-flex align-items-center justify-content-center" style="margin-top : 40px;">
-        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Feed', posts_path, class: "text-black text-decoration-none" %>
+        <%= link_to posts_path, class: "text-black text-decoration-none d-flex align-items-center justify-content-center" do %>
+          <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3") %>
+          Feed
+        <% end %>
       </div>
 
       <!-- Profile Section -->
       <div class="bg-primary py-2 rounded d-flex align-items-center justify-content-center" >
-        <%= image_tag("profile-filled.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Profile', "profile", class: "text-white text-decoration-none fw-bold" %>
+        <%= link_to "profile", class: "text-white text-decoration-none fw-bold d-flex align-items-center justify-content-center" do %>
+          <%= image_tag("profile-filled.png", alt: "Logo", class: "img me-3") %>
+          Profile
+        <% end %>
       </div>
 
       <!-- Logout Section -->
       <div class="d-flex align-items-center justify-content-center">
-        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
+        <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none d-flex align-items-center justify-content-center" do %>
+          <%= image_tag("Logout.png", alt: "Logo", class: "img me-3 ms-1") %>
+          Log out
+        <% end %>
       </div>
     </div>
   </div>

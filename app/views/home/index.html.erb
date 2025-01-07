@@ -4,7 +4,15 @@
     <%= image_tag("logo.png", alt: "Logo", class: "logo me-2 mx-3") %>
     <%= image_tag("logo_name.png", alt: "Logo", class: "logo mx-3") %>
   </header>
-
+  <% if flash[:notice] || flash[:alert] %>
+    <div class="fixed-top mb-4 d-flex justify-content-center me-5 mt-2">
+      <div class="alert d-flex justify-between align-items-center alert-success alert-dismissible shadow-lg" style="width: 50%" role="alert">
+        <%= flash[:notice] || flash[:alert] %>
+        <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
+        <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  <% end %>
   <!-- Content -->
   <div class="content text-center text-white mx-auto">
     <h1 class="text-center home-content p-6">

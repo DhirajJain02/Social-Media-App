@@ -7,9 +7,12 @@
   <div class="form-container bg-dark bg-opacity-50 rounded text-light shadow-lg col-md-4" style="margin-top: 50px;width: 458px; height: 646px; padding: 50px">
 
     <h2 class="mb-4">Login</h2>
-    <% if flash[:alert] %>
-      <div class="bg-red-500 text-white p-4 rounded mb-4">
-        <%= flash[:alert] %>
+    <% if flash[:notice] || flash[:alert] %>
+      <div class="fixed-top mb-4 mt-2 d-flex justify-content-center me-5">
+        <div class="alert d-flex justify-between align-items-center alert-secondary text-white bg-danger bg-opacity alert-dismissible shadow-lg" style="width: 80%" role="alert">
+          <%= flash[:notice] || flash[:alert] %>
+          <button type="button" class="btn-close bg-white align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
       </div>
     <% end %>
 
@@ -24,10 +27,6 @@
         <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
       </div>
 
-      <div class="mb-3 mt-5">
-        <%= f.check_box :remember_me, class: "form-check-input" %>
-        <%= f.label :remember_me, class: "form-check-label" %>
-      </div>
 
       <div>
         <%= f.submit "Login", class: "btn btn-primary mt-5", style: "width: 206px; font-size: 14px; height:48px" %>

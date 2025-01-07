@@ -1,19 +1,80 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-xl font-bold mb-4">Edit Post</h1>
+<div class="container mb-4 flex items-center justify-between" style="margin-top: 20px;">
+  <div class="flex align-items-center">
+    <%= image_tag 'Frame 8.png' %>
+  </div>
+  <!-- Right: Logo -->
+  <div class="flex items-center ">
+    <input type="text" placeholder=" 🔍  Search for something here..." class="search-width p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bd"/>
+  </div>
 
-  <%= form_with model: @post, local: true do |f| %>
-    <div class="mb-4">
-      <%= f.label :title, class: "block text-gray-700" %>
-      <%= f.text_field :title, class: "w-full p-2 border border-gray-300 rounded-lg" %>
-    </div>
-
-    <div class="mb-4">
-      <%= f.label :description, class: "block text-gray-700" %>
-      <%= f.text_area :description, class: "w-full p-2 border border-gray-300 rounded-lg" %>
-    </div>
-
-    <%= f.submit "Update Post", class: "bg-blue-500 text-white px-4 py-2 rounded-lg" %>
-  <% end %>
-
-  <%= link_to 'Back', posts_path, class: "bg-gray-500 text-white px-4 py-2 rounded-lg mt-4" %>
 </div>
+<div class="flex justify-content-center mt-5">
+<!--  <h1 class="d-flex text-center">Edit Post</h1>-->
+  <div class="container mx-auto bg-gray rounded-lg p-4">
+    <h2 class="text-center mb-4 fw-bold">Edit Post</h2>
+    <div class="container p-6 rounded-lg border border-gray-300 bg-white mb-4">
+      <div class="container">
+
+        <%= form_with model: @post, local: true do |f| %>
+          <%# @post.errors.full_messages.each do |message| %>
+          <!--                <div class="text-red-500"><%#= message %></div>-->
+          <%# end %>
+          <div class="mb-4">
+            <%= f.label :title, class: "block" %>
+            <%= f.text_field :title, class: "w-full p-2 border border-gray-300 rounded-lg bg-gray" %>
+            <% @post.errors.full_messages_for(:title).each do |message| %>
+              <div class="text-red-500"><%= message %></div>
+            <% end %>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :description, class: "block" %>
+            <%= f.text_area :description, class: "w-full p-2 border border-gray-300 bg-gray rounded-lg" %>
+            <% @post.errors.full_messages_for(:description).each do |message| %>
+              <div class="text-red-500"><%= message %></div>
+            <% end %>
+          </div>
+
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex align-items-center p-1 bt">
+              <!-- Live Video -->
+              <div class="flex items-center space-x-2">
+                <%= image_tag("bx_video.png", alt: "video", class: "img") %>
+                <%= button_tag "Live Video", type: "button", class: "hover1 ms-2 font-medium" %>
+              </div>
+
+              <!-- Photo/Video -->
+              <div class="flex items-center space-x-2">
+                <%= image_tag("ic_baseline-photo-camera-back.png", alt: "camera", class: "img") %>
+                <%= button_tag "Photo/Video", type: "button", class: " hover1 mx-2 font-medium" %>
+              </div>
+
+              <!-- Feeling -->
+              <div class="flex items-center space-x-2">
+                <%= image_tag("fluent_emoji-24-regular.png", alt: "smile", class: "img") %>
+                <%= button_tag "Feeling", type: "button", class: " hover:text-indigo-800 mx-2 font-medium" %>
+              </div>
+
+              <div class="flex align-items-center space-x-2">
+                <%= f.label :visibility, "Visibility" %>
+                <%= f.select :visibility, Post::VISIBILITY_OPTIONS, {}, class: "form-control mx-2", style: "width : 100px;" %>
+              </div>
+            </div>
+
+            <div class="flex space-x-2">
+              <%= f.submit "Update Post", class: "btn btn-primary px-4 py-2 text-decoration-none rounded-lg" %>
+              <%= link_to 'Back', posts_path, class: "bg-gray-500 text-white px-4 py-2 text-decoration-none rounded-lg" %>
+            </div>
+
+
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+

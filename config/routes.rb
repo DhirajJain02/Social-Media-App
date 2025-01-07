@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     get "/dashboard/reports", to: "dashboard#reports"
     get "/dashboard/uploads", to: "dashboard#upload_file", as: "upload_files"
     post "/dashboard/uploads", to: "dashboard#upload_csv", as: "upload_csv"
+    delete "managed_users/:id", to: "dashboard#delete", as: "delete_dashboard"
   end
   get "test_email", to: "emails#test_email"
   post "test_email", to: "emails#test_email"

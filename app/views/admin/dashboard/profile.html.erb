@@ -1,42 +1,29 @@
 <div class="flex">
-  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 250px">
-    <div class="d-flex flex-column gap-4 text-center">
-      <!--  Logo -->
-      <div class="flex mt-2" style="height: 40px">
-        <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
-      </div>
-      <!-- Feed Section -->
-      <div class=" d-flex" style="margin-top : 40px;">
-        <%= image_tag("Feed-filled.png", alt: "Logo", class: "img me-3 ms-1") %>
-        <%= link_to 'Feed', admin_dashboard_path, class: "text-black text-decoration-none" %>
-      </div>
-
-      <!-- Profile Section -->
-      <div class="bg-primary py-2 rounded d-flex px-1">
-        <%= image_tag("profile-filled.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Profile', admin_profile_path, class: "text-white fw-bold text-decoration-none" %>
-      </div>
-
-      <!-- Managed User Section -->
-      <div class="d-flex">
-        <%= image_tag("manage_user.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Manage Users', admin_managed_users_dashboard_path, class: "text-black text-decoration-none" %>
-      </div>
-
-      <!--Reports Section -->
-      <div class="d-flex">
-        <%= image_tag("report-filled.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Reports', admin_dashboard_reports_path, class: "text-black text-decoration-none" %>
-      </div>
-
-
-      <!-- Logout Section -->
-      <div class="d-flex">
-        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
+  <% if flash[:notice] || flash[:alert] %>
+    <div class="fixed-top mb-4 d-flex justify-content-center me-5 mt-2">
+      <div class="alert d-flex justify-between align-items-center alert-success alert-dismissible shadow-lg" style="width: 50%" role="alert">
+        <%= flash[:notice] || flash[:alert] %>
+        <%#= button_to 'Undo', '#', method: :get, class: "btn btn-sm btn-success mx-3 d-flex" %>
+        <button type="button" class="btn-close bg-danger align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     </div>
+  <% end %>
+  <div class=" text-white h-screen p-3 d-flex flex-column align-items-center" style="width: 250px">
+    <div class="d-flex flex-column gap-4 text-center">
+      <!-- Logo -->
+      <div class="flex mt-2" style="height: 40px; margin-bottom: 40px;">
+        <%= image_tag("Frame 8.png", alt: "Logo", class: "") %>
+      </div>
+
+      <!-- Navigation Links -->
+      <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_path, icon: "Feed-filled.png", text: "Feed", active_class: "text-black" } %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_profile_path, icon: "profile-filled.png", text: "Profile", custom_classes: "bg-primary py-2 rounded px-2", active_class: "text-white fw-bold" } %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_managed_users_dashboard_path, icon: "manage_user.png", text: "Manage Users"} %>
+      <%= render partial: "shared/navigation_link", locals: { path: admin_dashboard_reports_path, icon: "report-filled.png", text: "Reports", active_class: "text-black" } %>
+      <%= render partial: "shared/logout_link" %>
+    </div>
   </div>
+
 
   <div class="container mx-auto p-6">
     <div class="container mb-4 flex items-center justify-between">

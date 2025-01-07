@@ -8,20 +8,26 @@
       </div>
       <!-- Feed Section -->
       <div class="bg-primary py-2 rounded d-flex align-items-center justify-content-center" style="margin-top : 40px;">
-        <%= image_tag("Feed.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Feed', posts_path, class: "text-white text-decoration-none fw-bold" %>
+        <%= link_to posts_path, class: "text-white text-decoration-none fw-bold d-flex align-items-center justify-content-center" do%>
+          <%= image_tag("Feed.png", alt: "Logo", class: "img me-3") %>
+          Feed
+        <% end %>
       </div>
 
       <!-- Profile Section -->
       <div class="d-flex align-items-center justify-content-center">
-        <%= image_tag("Profile.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Profile', 'profile', class: "text-black text-decoration-none" %>
+        <%= link_to 'profile', class: "text-black text-decoration-none d-flex align-items-center justify-content-center" do %>
+          <%= image_tag("Profile.png", alt: "Logo", class: "img me-3") %>
+          Profile
+        <% end %>
       </div>
 
       <!-- Logout Section -->
       <div class="d-flex align-items-center justify-content-center">
-        <%= image_tag("Logout.png", alt: "Logo", class: "img me-3") %>
-        <%= link_to 'Log Out', destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none" %>
+        <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "text-black text-decoration-none d-flex align-items-center justify-content-center" do %>
+          <%= image_tag("Logout.png", alt: "Logo", class: "img me-3 ms-1") %>
+          Log out
+        <% end %>
       </div>
     </div>
   </div>
@@ -71,9 +77,9 @@
           <div class="container">
 
             <%= form_with model: @post, local: true do |f| %>
-              <% @post.errors.full_messages.each do |message| %>
-                <div class="text-red-500"><%= message %></div>
-              <% end %>
+              <%# @post.errors.full_messages.each do |message| %>
+<!--                <div class="text-red-500"><%#= message %></div>-->
+              <%# end %>
               <div class="mb-4">
                 <%= f.label :title, class: "block" %>
                 <%= f.text_field :title, class: "w-full p-2 border border-gray-300 rounded-lg bg-gray" %>
@@ -84,30 +90,30 @@
 
               <div class="mb-4">
                 <%= f.label :description, class: "block" %>
-                <%= f.text_area :description, class: "w-full p-2 border border-gray-300 bg-gray rounded-lg" %>
+                <%= f.text_area :description, class: "w-full p-2 border border-gray-300 bg-gray rounded-lg",style: "resize: none;" %>
                 <% @post.errors.full_messages_for(:description).each do |message| %>
                   <div class="text-red-500"><%= message %></div>
                 <% end %>
               </div>
 
               <div class="flex items-center justify-between mb-4">
-                <div class="flex align-items-center p-2 bt">
+                <div class="flex align-items-center p-1 bt">
                   <!-- Live Video -->
                   <div class="flex items-center space-x-2">
                     <%= image_tag("bx_video.png", alt: "video", class: "img") %>
-                    <%= button_tag "Live Video", type: "button", class: "text-indigo-600 hover1 ms-2 font-medium" %>
+                    <%= button_tag "Live Video", type: "button", class: " hover1 ms-2 font-medium" %>
                   </div>
 
                   <!-- Photo/Video -->
                   <div class="flex items-center space-x-2">
                     <%= image_tag("ic_baseline-photo-camera-back.png", alt: "camera", class: "img") %>
-                    <%= button_tag "Photo/Video", type: "button", class: "text-indigo-600 hover1 mx-2 font-medium" %>
+                    <%= button_tag "Photo/Video", type: "button", class: " hover1 mx-2 font-medium" %>
                   </div>
 
                   <!-- Feeling -->
                   <div class="flex items-center space-x-2">
                     <%= image_tag("fluent_emoji-24-regular.png", alt: "smile", class: "img") %>
-                    <%= button_tag "Feeling", type: "button", class: "text-indigo-600 hover:text-indigo-800 mx-2 font-medium" %>
+                    <%= button_tag "Feeling", type: "button", class: " hover:text-indigo-800 mx-2 font-medium" %>
                   </div>
 
                   <div class="flex align-items-center space-x-2">
@@ -132,8 +138,9 @@
               <div class="flex justify-between items-center">
                 <div>
                   <h2 class="text-xl font-semibold text-gray-800"><%= post.title %></h2>
-                  <p class="text-sm text-gray-500"><%= custom_time_ago_in_words(post.created_at) %>
+                  <p class="text-sm text-gray-500 m-0"><%= custom_time_ago_in_words(post.created_at) %>
                     , <%= post.visibility.capitalize %></p>
+                  <p class="text-sm text-gray-500 m-0">By <%= post.user.first_name.capitalize %> <%= post.user.last_name %> </p>
                 </div>
                 <!-- More Options Button -->
                 <div class="text-gray-500 cursor-pointer dropdown">
@@ -178,7 +185,7 @@
               <!-- Comment Input Section -->
               <div class="mt-4 flex items-center space-x-2">
                 <%= form_with model: [post, post.comments.build], remote: true, class: "flex w-full items-center" do |f| %>
-                  <%= f.text_area :content, placeholder: "Write a comment...", class: "comment-width border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500" %>
+                  <%= f.text_area :content, placeholder: "Write a comment...",style: "resize: none;", class: "comment-width border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray focus:ring-blue-500", required: true %>
                   <div class=" border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-gray mx-2 focus:ring-blue-500 p-2">
                     <%= button_tag type: 'submit', class: 'p-3 rounded-lg flex items-center' do %>
                       <%= image_tag("fluent_send-16-filled.png", alt: "Send", class: "w-6 h-50 mr-2 cursor-pointer hover:opacity-80") %>

@@ -1,0 +1,6 @@
+<div class="<%= defined?(custom_classes) ? custom_classes : 'd-flex' %>">
+  <%= link_to path, class: "d-flex align-items-center #{defined?(active_class) ? active_class : 'text-black'} text-decoration-none" do %>
+    <%= image_tag(icon, alt: text, class: "img me-3 ms-1") %>
+    <%= text %>
+  <% end %>
+</div>

@@ -29,10 +29,11 @@ class Admin::DashboardController < ApplicationController
     if @user.save
       # Assign roles to the user
       @user.role_ids = params[:user][:role_ids]
-      flash[:notice] = "Id has been created successfully."
+      flash[:notice] = "User has been created successfully."
       redirect_to admin_managed_users_dashboard_path # Redirect to users list
     else
       @roles = Role.all
+      flash.now[:error] = "User could not be created."
       render :new, status: :unprocessable_entity
     end
   end
@@ -57,13 +58,12 @@ class Admin::DashboardController < ApplicationController
         process_excel(file)
 
       else
-        redirect_to admin_upload_files_path, status: :unprocessable_entity
-        flash[:error] = "Please upload a CSV or Excel file."
-        return
+        flash.now[:alert] = "Please upload a CSV or Excel file."
+        return render :'admin/dashboard/upload_file', status: :unprocessable_entity
       end
-      flash[:success] = "File uploaded successfully!"
+      flash[:notice] = "File uploaded successfully!"
     else
-      flash[:error] = "Please select a file to upload."
+      flash[:alert] = "Please select a file to upload."
     end
 
     redirect_to admin_managed_users_dashboard_path
@@ -71,6 +71,12 @@ class Admin::DashboardController < ApplicationController
 
   def managed_users
     @users = User.all
+  end
+
+  def delete
+    @user = User.find(params[:id])
+    @user.destroy
+    redirect_to admin_managed_users_dashboard_path, notice: "Id deleted successfully!"
   end
 
   def activate_user
@@ -103,20 +109,20 @@ class Admin::DashboardController < ApplicationController
     when 'all_users_report'
       @users_report = User
                         .left_joins(:posts, :comments, :likes)
-                        .select("users.id, users.first_name, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
+                        .select("users.id, users.first_name, users.last_name, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
                         .group("users.id")
                         .order("users.first_name ASC")
     when 'users_more_than_10_posts_report'
       @users_report = User
-                        .left_joins(posts: [:comments, :likes])
-                        .select("users.first_name, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
+                        .left_joins(:posts, :comments, :likes)
+                        .select("users.id, users.first_name, users.last_name, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
                         .group("users.id")
-                        .having("COUNT(posts.id) > ?", 10)
+                        .having("COUNT(posts.id) > ?", 5)
                         .order("users.first_name ASC")
     when 'all_posts_report' # New case for all posts report
       @posts_report = Post
                         .left_joins(:comments, :likes)
-                        .select("posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
+                        .select("posts.id, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
                         .group("posts.id")
                         .order("posts.created_at DESC")
     else
@@ -194,22 +200,22 @@ class Admin::DashboardController < ApplicationController
     CSV.generate(headers: true) do |csv|
       if records.first.is_a?(User)
         # User-based reports
-        csv << ["First Name", "Post Title", "Post Description", "Comments Content", "Likes Count"]
+        csv << ["User Id", "First Name", "Last Name", "Post Title", "Post Description", "Comments Content", "Likes Count"]
         records.each do |user|
           user.posts.each do |post|
             # Loop through posts of a user and generate a row for each post
-            post.comment_contents.each do |comment_content|
-              csv << [user.first_name, post.title, post.description, comment_content, post.likes_count ]
-            end
+            # post.comment_contents.each do |comment_content|
+            csv << [user.id, user.first_name, user.last_name, post.title, post.description, post.comment_contents, post.likes.count]
+            # end
           end
         end
       elsif records.first.is_a?(Post)
         # Post-based reports
-        csv << ["Post Title", "Post Description", "Comments Content", "Likes Count"]
+        csv << ["Post Id", "Post Title", "Post Description", "Comments Content", "Likes Count"]
         records.each do |post|
-          post.comment_contents.each do |comment_content|
-            csv << [ post.title, post.description, comment_content, post.likes_count]
-          end
+          # post.comment_contents.each do |comment_content|
+            csv << [post.id, post.title, post.description, post.comment_contents, post.likes_count]
+          # end
         end
       end
     end
@@ -223,17 +229,19 @@ class Admin::DashboardController < ApplicationController
     workbook.add_worksheet(name: 'Report') do |sheet|
       if records.first.is_a?(User)
         # User-based reports
-        sheet.add_row ["First Name", "Post Title", "Post Description", "Comments Content", "Likes Count"]
+        sheet.add_row ["User Id", "First Name", "Last Name", "Post Title", "Post Description", "Comments Content", "Likes Count"]
         records.each do |user|
           user.posts.each do |post|
-            sheet.add_row [ user.first_name, post.title, post.description, post.comment_contents, post.likes_count                          ]
+            sheet.add_row [user.id, user.first_name, user.last_name, post.title, post.description, post.comment_contents, post.likes.count]
           end
         end
       elsif records.first.is_a?(Post)
         # Post-based reports
-        sheet.add_row ["Post Title", "Description", "Comments Content", "Likes Count"]
+        sheet.add_row ["Post Id", "Post Title", "Description", "Comments Content", "Likes Count"]
         records.each do |post|
-          sheet.add_row [post.title, post.description, post.comment_contents, post.likes_count]
+          # post.comment_contents.each do |comment_content|
+            sheet.add_row [post.id, post.title, post.description, post.comment_contents, post.likes_count]
+          # end
         end
       end
     end

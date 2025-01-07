@@ -1,0 +1,6 @@
+<div class="d-flex">
+  <%= link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Do you want to log out?" }, class: "d-flex align-items-center text-black text-decoration-none" do %>
+    <%= image_tag("Logout.png", alt: "Log Out", class: "img ms-1 me-3") %>
+    Log Out
+  <% end %>
+</div>
