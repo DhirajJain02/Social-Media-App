@@ -1,9 +1,11 @@
-<div class="bg-img position-relative d-flex justify-content-center align-items-center">
-  <!-- Header -->
+<div class="bg-img position-relative d-flex justify-content-center align-items-center vh-100">
+<!--  Header Section-->
   <header class="d-flex align-items-center p-3 position-absolute top-0 start-0 rounded shadow">
-    <%= image_tag("logo.png", alt: "Logo", class: "logo me-2 mx-3") %>
-    <%= image_tag("logo_name.png", alt: "Logo", class: "logo mx-3") %>
+    <%= image_tag("logo.png", alt: "Logo", class: "logo me-2 mx-2") %>
+    <%= image_tag("logo_name.png", alt: "Logo", class: "logo mx-2") %>
   </header>
+
+<!--  Flash Messages-->
   <% if flash[:notice] || flash[:alert] %>
     <div class="fixed-top mb-4 d-flex justify-content-center me-5 mt-2">
       <div class="alert d-flex justify-between align-items-center alert-success alert-dismissible shadow-lg" style="width: 50%" role="alert">
@@ -13,20 +15,16 @@
       </div>
     </div>
   <% end %>
-  <!-- Content -->
-  <div class="content text-center text-white mx-auto">
-    <h1 class="text-center home-content p-6">
 
+  <!-- Content -->
+  <div class="content text-center text-white container px-4">
+    <h1 class="display-4 fw-bold">
       Social media shared today, tomorrow or by location
     </h1>
-    <p class="mt-4" style="font-size: 20px; font-weight: 600">Discover with Maze</p>
-    <div class="mt-4 flex gap-3 px-5">
-      <%= link_to 'Create Account', new_user_registration_path, class: "btn btn-primary col-6 me-2 px-4 py-2 btn-width" %>
-      <!--      <button class="btn btn-primary col-6 me-2 px-4 py-2 btn-width">Create Account</button>-->
-      <%= link_to 'Login', new_user_session_path, class: "btn btn-light col-6 me-2 px-4 py-2 btn-width" %>
-      <%#= link_to 'Delete', destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-500 dropdown-item" %>
-
-      <!--      <button class="btn btn-light col-6 text-info px-4 py-2 btn-width ">Login</button>-->
+    <p class="mt-4 fs-5 fw-semibold">Discover with Maze</p>
+    <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 mt-4">
+      <%= link_to 'Create Account', new_user_registration_path, class: "btn btn-primary me-2 px-4 py-2 btn-width" %>
+      <%= link_to 'Login', new_user_session_path, class: "btn btn-light me-2 px-4 py-2 btn-width" %>
     </div>
   </div>
 </div>

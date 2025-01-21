@@ -1,15 +1,15 @@
-<div class="bg-img position-relative d-flex justify-content-center align-items-center">
+<div class="bg-img position-relative d-flex justify-content-center align-items-center vh-100">
   <!-- Header -->
   <header class="d-flex align-items-center p-3 position-absolute top-0 start-0 rounded shadow">
     <%= image_tag("logo.png", alt: "Logo", class: "logo me-2 mx-3") %>
     <%= image_tag("logo_name.png", alt: "Logo", class: "logo mx-3") %>
   </header>
-  <div class="form-container bg-dark bg-opacity-50 rounded text-light shadow-lg col-md-4" style="margin-top: 50px;width: 458px; height: 646px; padding: 50px">
+  <div class="form-container bg-dark bg-opacity-50 rounded text-light shadow-lg col-10 col-md-6 col-lg-4 px-5 py-5" >
 
     <h2 class="mb-4">Login</h2>
     <% if flash[:notice] || flash[:alert] %>
-      <div class="fixed-top mb-4 mt-2 d-flex justify-content-center me-5">
-        <div class="alert d-flex justify-between align-items-center alert-secondary text-white bg-danger bg-opacity alert-dismissible shadow-lg" style="width: 80%" role="alert">
+      <div class="fixed-top mb-4 d-flex justify-content-center me-5 mt-2">
+        <div class="alert d-flex justify-between align-items-center alert-success alert-dismissible shadow-lg" style="width: 50%" role="alert">
           <%= flash[:notice] || flash[:alert] %>
           <button type="button" class="btn-close bg-white align-items-center" style="border-radius: 20px; padding: 5px; width: 20px; height: 20px; margin: 15px; " data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
