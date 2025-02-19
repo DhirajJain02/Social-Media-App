@@ -46,7 +46,7 @@ gem "caxlsx"
 gem "roo"
 gem "sendgrid-ruby"
 gem "sidekiq"
-gem 'pg'
+gem "pg"
 
 
 
