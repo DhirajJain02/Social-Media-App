@@ -61,3 +61,13 @@ production:
   database: <%= ENV['DATABASE_NAME'] %>
   username: <%= ENV['PG_USERNAME'] %>
   password: <%= ENV['PG_PASSWORD'] %>
+
+cable:
+    <<: *default
+    database: maze_cable
+queue:
+    <<: *default
+    database: maze_queue
+cache:
+    <<: *default
+    database: maze_cache
