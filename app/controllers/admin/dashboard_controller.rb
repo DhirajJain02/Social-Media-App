@@ -109,22 +109,36 @@ class Admin::DashboardController < ApplicationController
     when 'all_users_report'
       @users_report = User
                         .left_joins(:posts, :comments, :likes)
-                        .select("users.id, users.first_name, users.last_name, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
-                        .group("users.id")
+                        .select("users.id, users.first_name, users.last_name,
+          STRING_AGG(posts.title, ', ') AS post_titles,
+          STRING_AGG(posts.description, ', ') AS post_descriptions,
+          STRING_AGG(comments.content, ', ') AS comment_contents,
+          COUNT(DISTINCT likes.id) AS likes_count")
+                        .group("users.id, users.first_name, users.last_name")
                         .order("users.first_name ASC")
+
     when 'users_more_than_10_posts_report'
       @users_report = User
                         .left_joins(:posts, :comments, :likes)
-                        .select("users.id, users.first_name, users.last_name, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
-                        .group("users.id")
-                        .having("COUNT(posts.id) > ?", 5)
+                        .select("users.id, users.first_name, users.last_name,
+          STRING_AGG(posts.title, ', ') AS post_titles,
+          STRING_AGG(posts.description, ', ') AS post_descriptions,
+          STRING_AGG(comments.content, ', ') AS comment_contents,
+          COUNT(DISTINCT likes.id) AS likes_count,
+          COUNT(posts.id) AS post_count")
+                        .group("users.id, users.first_name, users.last_name")
+                        .having("COUNT(posts.id) > ?", 10)
                         .order("users.first_name ASC")
+
     when 'all_posts_report' # New case for all posts report
       @posts_report = Post
                         .left_joins(:comments, :likes)
-                        .select("posts.id, posts.title, posts.description, comments.content AS comment_content, COUNT(DISTINCT likes.id) AS likes_count")
-                        .group("posts.id")
+                        .select("posts.id, posts.title, posts.description,
+          STRING_AGG(comments.content, ', ') AS comment_contents,
+          COUNT(DISTINCT likes.id) AS likes_count")
+                        .group("posts.id, posts.title, posts.description")
                         .order("posts.created_at DESC")
+
     else
       @posts_report = Post.all # Default or other report logic
     end
@@ -214,7 +228,7 @@ class Admin::DashboardController < ApplicationController
         csv << ["Post Id", "Post Title", "Post Description", "Comments Content", "Likes Count"]
         records.each do |post|
           # post.comment_contents.each do |comment_content|
-            csv << [post.id, post.title, post.description, post.comment_contents, post.likes_count]
+          csv << [post.id, post.title, post.description, post.comment_contents, post.likes_count]
           # end
         end
       end
@@ -240,7 +254,7 @@ class Admin::DashboardController < ApplicationController
         sheet.add_row ["Post Id", "Post Title", "Description", "Comments Content", "Likes Count"]
         records.each do |post|
           # post.comment_contents.each do |comment_content|
-            sheet.add_row [post.id, post.title, post.description, post.comment_contents, post.likes_count]
+          sheet.add_row [post.id, post.title, post.description, post.comment_contents, post.likes_count]
           # end
         end
       end
